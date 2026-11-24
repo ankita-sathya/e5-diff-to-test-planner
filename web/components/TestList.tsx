@@ -5,9 +5,10 @@ import { PlannerResult } from '@/lib/types';
 interface TestListProps {
   result: PlannerResult | null;
   loading: boolean;
+  allowExport?: boolean;
 }
 
-export default function TestList({ result, loading }: TestListProps) {
+export default function TestList({ result, loading, allowExport = true }: TestListProps) {
   const getRiskBadgeColor = (risk: string) => {
     switch (risk) {
       case 'HIGH':
@@ -48,7 +49,7 @@ export default function TestList({ result, loading }: TestListProps) {
     return (
       <div className="card text-center py-12">
         <p className="text-slate-600 dark:text-slate-400">
-          {result ? 'No test cases matched the selected thresholds.' : 'No test cases ranked yet. Upload a Git diff to analyze.'}
+          {result ? 'No test cases were selected.' : 'No test cases ranked yet. Upload a Git diff to analyze.'}
         </p>
       </div>
     );
@@ -58,13 +59,15 @@ export default function TestList({ result, loading }: TestListProps) {
     <div className="card">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Ranked Tests</h2>
-        <button
-          onClick={exportJSON}
-          className="btn-secondary flex items-center gap-2"
-        >
-          <Download className="w-4 h-4" />
-          Export JSON
-        </button>
+        {allowExport && (
+          <button
+            onClick={exportJSON}
+            className="btn-secondary flex items-center gap-2"
+          >
+            <Download className="w-4 h-4" />
+            Export JSON
+          </button>
+        )}
       </div>
 
       <div className="overflow-x-auto">

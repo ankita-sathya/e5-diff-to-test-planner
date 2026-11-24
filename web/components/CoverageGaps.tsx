@@ -27,7 +27,7 @@ export default function CoverageGaps({ result, loading }: CoverageGapsProps) {
     return (
       <div className="card">
         <div className="text-center py-8">
-          <p className="text-slate-600 dark:text-slate-400">✓ No coverage gaps detected!</p>
+          <p className="text-slate-600 dark:text-slate-400">No coverage gap flagged by this analysis. This does not prove complete coverage.</p>
         </div>
       </div>
     );

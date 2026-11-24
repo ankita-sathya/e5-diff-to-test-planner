@@ -7,6 +7,7 @@ import { PlannerResult, AnalysisRequest } from '@/lib/types';
 import Metrics from '@/components/Metrics';
 import TestList from '@/components/TestList';
 import CoverageGaps from '@/components/CoverageGaps';
+import { demoScenarios } from '@/lib/demo-scenarios';
 
 export default function Home() {
   const [darkMode, setDarkMode] = useState(true);
@@ -18,6 +19,8 @@ export default function Home() {
   const [highThreshold, setHighThreshold] = useState(0.78);
   const [mediumThreshold, setMediumThreshold] = useState(0.65);
   const [backendUrl, setBackendUrl] = useState(process.env.NEXT_PUBLIC_API_URL || '');
+  const [demoId, setDemoId] = useState(demoScenarios[0].id);
+  const demo = demoScenarios.find((scenario) => scenario.id === demoId) ?? demoScenarios[0];
 
   const handleAnalyze = async () => {
     setResult(null);
@@ -106,6 +109,40 @@ export default function Home() {
 
         {/* Main Content */}
         <main className="max-w-7xl mx-auto px-4 py-8">
+          <section aria-labelledby="demo-heading" className="mb-12">
+            <div className="card mb-6">
+              <h2 id="demo-heading" className="text-2xl font-bold mb-2">Explore an example</h2>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                Choose a scenario to preview what a test-selection report can look like. No server or model is needed.
+                Results, scores and timings below are illustrative fixtures, not real analysis or measured savings.
+                Changing the live-analysis thresholds does not affect these examples.
+              </p>
+              <label htmlFor="demo-scenario" className="block text-sm font-semibold mb-2">Example scenario</label>
+              <select id="demo-scenario" value={demoId} onChange={(e) => setDemoId(e.target.value)} className="input-field mb-4">
+                {demoScenarios.map((scenario) => <option key={scenario.id} value={scenario.id}>{scenario.name}</option>)}
+              </select>
+              <div aria-live="polite" className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+                <p><strong>Example change:</strong> {demo.change}</p>
+                <p><strong>Example defect:</strong> {demo.defect}</p>
+                <p><strong>Example output:</strong> Suggested tests and possible gap for review, compared with a hypothetical 10-minute full suite.</p>
+              </div>
+            </div>
+            <div aria-label="Illustrative example results">
+              <Metrics result={demo.result} loading={false} showTimeSavings={demo.result.ranked_tests.length > 0} />
+              {demo.result.ranked_tests.length === 0 && (
+                <p className="mb-4 text-sm text-amber-700 dark:text-amber-300">
+                  No tests selected is not evidence that regression testing can be skipped.
+                </p>
+              )}
+              <TestList result={demo.result} loading={false} allowExport={false} />
+              <div className="mt-6"><CoverageGaps result={demo.result} loading={false} /></div>
+            </div>
+          </section>
+
+          <h2 className="text-2xl font-bold mb-4">Analyze your own change</h2>
+          <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">
+            This separate live analysis requires an analysis server. The examples above work without one.
+          </p>
           {/* Input Section */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             {/* Diff Input */}

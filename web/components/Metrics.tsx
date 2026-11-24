@@ -5,9 +5,10 @@ import { PlannerResult } from '@/lib/types';
 interface MetricsProps {
   result: PlannerResult | null;
   loading: boolean;
+  showTimeSavings?: boolean;
 }
 
-export default function Metrics({ result, loading }: MetricsProps) {
+export default function Metrics({ result, loading, showTimeSavings = true }: MetricsProps) {
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -40,14 +41,20 @@ export default function Metrics({ result, loading }: MetricsProps) {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-slate-600 dark:text-slate-400 text-sm font-medium">Estimated Time Saved</p>
-            <p className="text-3xl font-bold text-slate-900 dark:text-white mt-2">
-              {Math.round(result.hil_time_saved_seconds / 60)}m
-            </p>
-            <p className="text-xs text-green-600 dark:text-green-400 mt-1">
-              {result.full_suite_time_seconds > 0
-                ? (100 * result.hil_time_saved_seconds / result.full_suite_time_seconds).toFixed(1)
-                : '0.0'}% estimated reduction
-            </p>
+            {showTimeSavings ? (
+              <>
+                <p className="text-3xl font-bold text-slate-900 dark:text-white mt-2">
+                  {Math.round(result.hil_time_saved_seconds / 60)}m
+                </p>
+                <p className="text-xs text-green-600 dark:text-green-400 mt-1">
+                  {result.full_suite_time_seconds > 0
+                    ? (100 * result.hil_time_saved_seconds / result.full_suite_time_seconds).toFixed(1)
+                    : '0.0'}% estimated reduction
+                </p>
+              </>
+            ) : (
+              <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">Not shown when no tests are selected</p>
+            )}
           </div>
           <Clock className="w-8 h-8 text-green-500" />
         </div>

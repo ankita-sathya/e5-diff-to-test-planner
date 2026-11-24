@@ -90,7 +90,10 @@ not sent to the model provider. `--mock-embeddings` affects text only.
 The static frontend is designed for
 `https://ankita-sathya.github.io/e5-diff-to-test-planner/`. GitHub Pages cannot
 run Python; the page needs a separately running HTTPS analysis server before
-its Analyze button can work. Image/video analysis is currently CLI-only.
+its Analyze button can work. The scenario dropdown previews three illustrative
+reports without a server; their scores and timings are invented examples, not
+model predictions or measured savings. Threshold sliders apply only to live
+analysis. Image/video analysis is currently CLI-only.
 
 1. In GitHub, open repository **Settings → Pages** and select **GitHub Actions**
    as the source if it is not already enabled. The workflow builds and deploys
