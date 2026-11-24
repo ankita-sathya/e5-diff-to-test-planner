@@ -1,0 +1,26 @@
+[
+  {
+    "id": "XRAY-MEDIA-1",
+    "title": "Climate control passenger temperature restoration",
+    "domain": "Climate_Control",
+    "preconditions": "Climate control simulator and display are active",
+    "steps": ["Set separate driver and passenger temperatures", "Cycle the ignition", "Verify restored passenger temperature"],
+    "expected_result": "The passenger setting is restored and no error appears",
+    "hil_bench_tags": ["Climate", "HMI"],
+    "estimated_duration_seconds": 90,
+    "languages_tested": ["EN"],
+    "attachments": ["sample_media/climate.png"]
+  },
+  {
+    "id": "XRAY-MEDIA-2",
+    "title": "Media player radio display",
+    "domain": "Media_Playback",
+    "preconditions": "Radio simulator connected",
+    "steps": ["Open media player", "Select the FM radio source", "Verify the displayed frequency"],
+    "expected_result": "Radio source and frequency display correctly",
+    "hil_bench_tags": ["Radio", "HMI"],
+    "estimated_duration_seconds": 60,
+    "languages_tested": ["EN"],
+    "attachments": ["sample_media/media.png"]
+  }
+]

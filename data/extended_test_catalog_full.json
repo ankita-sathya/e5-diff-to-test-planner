@@ -1,0 +1,1019 @@
+[
+  {
+    "id": "SCENARIO-DRIVE-SPEED-001",
+    "title": "Speedometer Digital Display: Precision Range Extension",
+    "domain": "Driving_Functions",
+    "preconditions": "Extends speedometer measurement precision from 1 km/h to 0.1 km/h increments for cruise control feedback",
+    "steps": [
+      "Test Extends speedometer measurement precision from 1 km/h to 0.1 km/h increments for cruise control feedback"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/drive/speedometer.c",
+      "config/measurement_precision.h"
+    ],
+    "estimated_duration_seconds": 90,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "speedometer",
+      "precision",
+      "CAN",
+      "display"
+    ]
+  },
+  {
+    "id": "SCENARIO-DRIVE-SPEED-002",
+    "title": "Cruise Control: Acceleration Ramp Rate",
+    "domain": "Driving_Functions",
+    "preconditions": "Changes cruise control acceleration from linear to exponential ramp (0-100 km/h in 8s instead of 12s)",
+    "steps": [
+      "Test Changes cruise control acceleration from linear to exponential ramp (0-100 km/h in 8s instead of 12s)"
+    ],
+    "expected_result": "Scenario passes with risk level HIGH",
+    "hil_bench_tags": [
+      "src/drive/cruise_control.c",
+      "config/accel_profile.xml"
+    ],
+    "estimated_duration_seconds": 138,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "cruise_control",
+      "acceleration",
+      "safety"
+    ]
+  },
+  {
+    "id": "SCENARIO-DRIVE-SPEED-003",
+    "title": "Speed Governor: Maximum Limit Enforcement",
+    "domain": "Driving_Functions",
+    "preconditions": "Adds regional speed governor limiting (120 km/h Germany, 130 km/h EU, 110 km/h China)",
+    "steps": [
+      "Test Adds regional speed governor limiting (120 km/h Germany, 130 km/h EU, 110 km/h China)"
+    ],
+    "expected_result": "Scenario passes with risk level CRITICAL",
+    "hil_bench_tags": [
+      "src/drive/speed_governor.c",
+      "config/regional_limits.h"
+    ],
+    "estimated_duration_seconds": 186,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "governor",
+      "regional",
+      "safety",
+      "compliance"
+    ]
+  },
+  {
+    "id": "SCENARIO-DRIVE-BRAKE-001",
+    "title": "ABS (Anti-lock Braking): Modulation Frequency",
+    "domain": "Driving_Functions",
+    "preconditions": "Increases ABS modulation from 10 Hz to 20 Hz for improved brake feel and shortened stopping distance",
+    "steps": [
+      "Test Increases ABS modulation from 10 Hz to 20 Hz for improved brake feel and shortened stopping distance"
+    ],
+    "expected_result": "Scenario passes with risk level HIGH",
+    "hil_bench_tags": [
+      "src/brake/abs.c",
+      "config/brake_params.h"
+    ],
+    "estimated_duration_seconds": 168,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "ABS",
+      "braking",
+      "safety",
+      "modulation"
+    ]
+  },
+  {
+    "id": "SCENARIO-DRIVE-BRAKE-002",
+    "title": "Emergency Brake Assist: Pressure Ramp",
+    "domain": "Driving_Functions",
+    "preconditions": "Optimizes emergency brake assist pressure application curve for faster panic stop response",
+    "steps": [
+      "Test Optimizes emergency brake assist pressure application curve for faster panic stop response"
+    ],
+    "expected_result": "Scenario passes with risk level CRITICAL",
+    "hil_bench_tags": [
+      "src/brake/emergency_assist.c",
+      "config/brake_curves.c"
+    ],
+    "estimated_duration_seconds": 210,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "emergency_brake",
+      "safety_critical",
+      "pressure"
+    ]
+  },
+  {
+    "id": "SCENARIO-DRIVE-BRAKE-003",
+    "title": "Hill Start Assist: Hold Duration",
+    "domain": "Driving_Functions",
+    "preconditions": "Extends hill start assist hold time from 1s to 2s for driver comfort on steep grades",
+    "steps": [
+      "Test Extends hill start assist hold time from 1s to 2s for driver comfort on steep grades"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/brake/hill_start.c",
+      "src/drive/engine_control.c"
+    ],
+    "estimated_duration_seconds": 84,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "hill_start",
+      "gradient",
+      "comfort"
+    ]
+  },
+  {
+    "id": "SCENARIO-DRIVE-TRACTION-001",
+    "title": "Traction Control: Slip Threshold Adjustment",
+    "domain": "Driving_Functions",
+    "preconditions": "Dynamically adjusts wheel slip threshold based on road surface detection (0.3% asphalt \u2192 1.2% gravel)",
+    "steps": [
+      "Test Dynamically adjusts wheel slip threshold based on road surface detection (0.3% asphalt \u2192 1.2% gravel)"
+    ],
+    "expected_result": "Scenario passes with risk level HIGH",
+    "hil_bench_tags": [
+      "src/traction/slip_control.c",
+      "src/sensors/surface_detect.c"
+    ],
+    "estimated_duration_seconds": 156,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "traction",
+      "slip",
+      "surface_detection"
+    ]
+  },
+  {
+    "id": "SCENARIO-DRIVE-TRACTION-002",
+    "title": "Engine Power Reduction: Torque Limiting",
+    "domain": "Driving_Functions",
+    "preconditions": "Reduces engine torque output during traction control activation to improve wheel grip on low-friction surfaces",
+    "steps": [
+      "Test Reduces engine torque output during traction control activation to improve wheel grip on low-friction surfaces"
+    ],
+    "expected_result": "Scenario passes with risk level HIGH",
+    "hil_bench_tags": [
+      "src/engine/torque_limiter.c",
+      "src/traction/engine_interface.c"
+    ],
+    "estimated_duration_seconds": 144,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "traction",
+      "torque",
+      "engine",
+      "power"
+    ]
+  },
+  {
+    "id": "SCENARIO-DRIVE-STEER-001",
+    "title": "Power Steering Assist: Speed-Dependent Mapping",
+    "domain": "Driving_Functions",
+    "preconditions": "Implements progressive power steering assist that decreases with speed (100% at 0 \u2192 20% at 150 km/h)",
+    "steps": [
+      "Test Implements progressive power steering assist that decreases with speed (100% at 0 \u2192 20% at 150 km/h)"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/steering/power_steering.c",
+      "src/steering/assist_curve.h"
+    ],
+    "estimated_duration_seconds": 114,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "steering",
+      "assist",
+      "feedback"
+    ]
+  },
+  {
+    "id": "SCENARIO-DRIVE-STEER-002",
+    "title": "Lane Keep Assist: Steering Angle Correction",
+    "domain": "Driving_Functions",
+    "preconditions": "Adjusts lane keeping correction from gentle guidance to aggressive lane centering based on driver input",
+    "steps": [
+      "Test Adjusts lane keeping correction from gentle guidance to aggressive lane centering based on driver input"
+    ],
+    "expected_result": "Scenario passes with risk level HIGH",
+    "hil_bench_tags": [
+      "src/steering/lane_keep.c",
+      "config/correction_level.h"
+    ],
+    "estimated_duration_seconds": 150,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "lane_keep",
+      "steering",
+      "autonomous"
+    ]
+  },
+  {
+    "id": "SCENARIO-DRIVE-ENGINE-001",
+    "title": "Idle Speed Control: Temperature Compensation",
+    "domain": "Driving_Functions",
+    "preconditions": "Improves idle speed stability with dynamic compensation for engine temperature changes",
+    "steps": [
+      "Test Improves idle speed stability with dynamic compensation for engine temperature changes"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/engine/idle_speed.c",
+      "src/sensors/temp_sensor.c"
+    ],
+    "estimated_duration_seconds": 78,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "idle",
+      "engine",
+      "stability"
+    ]
+  },
+  {
+    "id": "SCENARIO-DRIVE-ENGINE-002",
+    "title": "Automatic Transmission: Shift Schedule Optimization",
+    "domain": "Driving_Functions",
+    "preconditions": "Optimizes gear shift timing based on road conditions and driving style (eco/sport/normal modes)",
+    "steps": [
+      "Test Optimizes gear shift timing based on road conditions and driving style (eco/sport/normal modes)"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/transmission/shift_schedule.c",
+      "config/drive_modes.h"
+    ],
+    "estimated_duration_seconds": 120,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "transmission",
+      "shift",
+      "efficiency"
+    ]
+  },
+  {
+    "id": "SCENARIO-DRIVE-ENGINE-003",
+    "title": "Engine Temperature: Cooling Fan Control",
+    "domain": "Driving_Functions",
+    "preconditions": "Implements PWM-based cooling fan control for optimal temperature management and noise reduction",
+    "steps": [
+      "Test Implements PWM-based cooling fan control for optimal temperature management and noise reduction"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/engine/cooling_fan.c",
+      "config/temp_control.h"
+    ],
+    "estimated_duration_seconds": 96,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "cooling",
+      "temperature",
+      "fan"
+    ]
+  },
+  {
+    "id": "SCENARIO-DRIVE-FUEL-001",
+    "title": "Fuel Injection: Timing Optimization",
+    "domain": "Driving_Functions",
+    "preconditions": "Optimizes fuel injection timing based on engine load and RPM for better combustion efficiency",
+    "steps": [
+      "Test Optimizes fuel injection timing based on engine load and RPM for better combustion efficiency"
+    ],
+    "expected_result": "Scenario passes with risk level HIGH",
+    "hil_bench_tags": [
+      "src/fuel/injection_timing.c",
+      "config/injection_map.c"
+    ],
+    "estimated_duration_seconds": 132,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "fuel",
+      "injection",
+      "efficiency"
+    ]
+  },
+  {
+    "id": "SCENARIO-DRIVE-FUEL-002",
+    "title": "Fuel Pump Pressure: Dynamic Regulation",
+    "domain": "Driving_Functions",
+    "preconditions": "Dynamically adjusts fuel pump pressure based on engine demand to reduce power consumption",
+    "steps": [
+      "Test Dynamically adjusts fuel pump pressure based on engine demand to reduce power consumption"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/fuel/pump_control.c",
+      "src/sensors/pressure_sensor.c"
+    ],
+    "estimated_duration_seconds": 108,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "fuel_pump",
+      "pressure",
+      "efficiency"
+    ]
+  },
+  {
+    "id": "SCENARIO-UI-BUTTON-001",
+    "title": "Button: Touch State Feedback Animation",
+    "domain": "Core_UI",
+    "preconditions": "Adds haptic feedback and color transition animation for button press events (ripple effect)",
+    "steps": [
+      "Test Adds haptic feedback and color transition animation for button press events (ripple effect)"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/ui/components/button.kt",
+      "res/anim/button_ripple.xml"
+    ],
+    "estimated_duration_seconds": 72,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "button",
+      "animation",
+      "feedback"
+    ]
+  },
+  {
+    "id": "SCENARIO-UI-BUTTON-002",
+    "title": "Button: Accessibility State Indicators",
+    "domain": "Core_UI",
+    "preconditions": "Adds visual indicators for button accessibility states (focused, disabled, loading) for screen readers",
+    "steps": [
+      "Test Adds visual indicators for button accessibility states (focused, disabled, loading) for screen readers"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/ui/components/button.kt",
+      "src/accessibility/screen_reader.c"
+    ],
+    "estimated_duration_seconds": 90,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "accessibility",
+      "button",
+      "ARIA"
+    ]
+  },
+  {
+    "id": "SCENARIO-UI-INPUT-001",
+    "title": "Text Input: Real-time Validation Feedback",
+    "domain": "Core_UI",
+    "preconditions": "Implements real-time character count, password strength meter, and format validation",
+    "steps": [
+      "Test Implements real-time character count, password strength meter, and format validation"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/ui/components/text_input.kt",
+      "src/validation/input_validator.c"
+    ],
+    "estimated_duration_seconds": 108,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "text_input",
+      "validation",
+      "feedback"
+    ]
+  },
+  {
+    "id": "SCENARIO-UI-INPUT-002",
+    "title": "Text Input: Multilingual Keyboard Layout",
+    "domain": "Core_UI",
+    "preconditions": "Dynamically switches keyboard layout (QWERTY/QWERTZ/AZERTY) based on input language",
+    "steps": [
+      "Test Dynamically switches keyboard layout (QWERTY/QWERTZ/AZERTY) based on input language"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/ui/components/text_input.kt",
+      "config/keyboard_layouts.h"
+    ],
+    "estimated_duration_seconds": 96,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "keyboard",
+      "i18n",
+      "text_input"
+    ]
+  },
+  {
+    "id": "SCENARIO-UI-INPUT-003",
+    "title": "Text Input: Autocomplete Suggestion Engine",
+    "domain": "Core_UI",
+    "preconditions": "Adds predictive text suggestions with Levenshtein distance algorithm for typo correction",
+    "steps": [
+      "Test Adds predictive text suggestions with Levenshtein distance algorithm for typo correction"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/ui/components/text_input.kt",
+      "src/nlp/autocomplete.c"
+    ],
+    "estimated_duration_seconds": 126,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "autocomplete",
+      "suggestions",
+      "NLP"
+    ]
+  },
+  {
+    "id": "SCENARIO-UI-DIALOG-001",
+    "title": "Dialog: Fade In/Out Animation",
+    "domain": "Core_UI",
+    "preconditions": "Implements smooth fade and scale animations for dialog appearance and dismissal",
+    "steps": [
+      "Test Implements smooth fade and scale animations for dialog appearance and dismissal"
+    ],
+    "expected_result": "Scenario passes with risk level LOW",
+    "hil_bench_tags": [
+      "src/ui/components/dialog.kt",
+      "res/anim/dialog_enter.xml"
+    ],
+    "estimated_duration_seconds": 48,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "dialog",
+      "animation",
+      "modal"
+    ]
+  },
+  {
+    "id": "SCENARIO-UI-DIALOG-002",
+    "title": "Dialog: Keyboard Navigation",
+    "domain": "Core_UI",
+    "preconditions": "Adds keyboard shortcut support (Tab for focus, Enter/Escape for confirm/cancel)",
+    "steps": [
+      "Test Adds keyboard shortcut support (Tab for focus, Enter/Escape for confirm/cancel)"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/ui/components/dialog.kt",
+      "src/input/keyboard_handler.c"
+    ],
+    "estimated_duration_seconds": 84,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "keyboard",
+      "navigation",
+      "accessibility"
+    ]
+  },
+  {
+    "id": "SCENARIO-UI-LIST-001",
+    "title": "List: Virtual Scrolling for Large Datasets",
+    "domain": "Core_UI",
+    "preconditions": "Implements virtualized list rendering for smooth scrolling with 10,000+ items",
+    "steps": [
+      "Test Implements virtualized list rendering for smooth scrolling with 10,000+ items"
+    ],
+    "expected_result": "Scenario passes with risk level HIGH",
+    "hil_bench_tags": [
+      "src/ui/components/list.kt",
+      "src/rendering/virtual_scroll.c"
+    ],
+    "estimated_duration_seconds": 138,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "list",
+      "scrolling",
+      "performance"
+    ]
+  },
+  {
+    "id": "SCENARIO-UI-LIST-002",
+    "title": "List: Swipe Gestures for Actions",
+    "domain": "Core_UI",
+    "preconditions": "Adds left/right swipe gestures to list items for delete, archive, or custom actions",
+    "steps": [
+      "Test Adds left/right swipe gestures to list items for delete, archive, or custom actions"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/ui/components/list.kt",
+      "src/gesture/swipe_handler.c"
+    ],
+    "estimated_duration_seconds": 102,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "gesture",
+      "swipe",
+      "list"
+    ]
+  },
+  {
+    "id": "SCENARIO-UI-LIST-003",
+    "title": "List: Drag and Drop Reordering",
+    "domain": "Core_UI",
+    "preconditions": "Enables drag-and-drop item reordering with visual feedback during drag operation",
+    "steps": [
+      "Test Enables drag-and-drop item reordering with visual feedback during drag operation"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/ui/components/list.kt",
+      "src/gesture/drag_handler.c"
+    ],
+    "estimated_duration_seconds": 114,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "drag_drop",
+      "reorder",
+      "gesture"
+    ]
+  },
+  {
+    "id": "SCENARIO-UI-MENU-001",
+    "title": "Menu: Context Menu with Positioning",
+    "domain": "Core_UI",
+    "preconditions": "Implements smart context menu positioning that avoids screen edges and respects keyboard focus",
+    "steps": [
+      "Test Implements smart context menu positioning that avoids screen edges and respects keyboard focus"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/ui/components/menu.kt",
+      "src/layout/position_calc.c"
+    ],
+    "estimated_duration_seconds": 90,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "menu",
+      "positioning",
+      "context"
+    ]
+  },
+  {
+    "id": "SCENARIO-UI-MENU-002",
+    "title": "Menu: Submenu Cascading with Keyboard",
+    "domain": "Core_UI",
+    "preconditions": "Adds keyboard navigation for multi-level submenus with arrow key support",
+    "steps": [
+      "Test Adds keyboard navigation for multi-level submenus with arrow key support"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/ui/components/menu.kt",
+      "src/input/keyboard_handler.c"
+    ],
+    "estimated_duration_seconds": 96,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "menu",
+      "keyboard",
+      "navigation"
+    ]
+  },
+  {
+    "id": "SCENARIO-UI-PROGRESS-001",
+    "title": "Progress Bar: Indeterminate Loading State",
+    "domain": "Core_UI",
+    "preconditions": "Implements animated indeterminate progress bar with customizable animation speed",
+    "steps": [
+      "Test Implements animated indeterminate progress bar with customizable animation speed"
+    ],
+    "expected_result": "Scenario passes with risk level LOW",
+    "hil_bench_tags": [
+      "src/ui/components/progress_bar.kt",
+      "res/anim/progress_indeterminate.xml"
+    ],
+    "estimated_duration_seconds": 42,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "progress",
+      "loading",
+      "animation"
+    ]
+  },
+  {
+    "id": "SCENARIO-UI-PROGRESS-002",
+    "title": "Spinner: Custom Color Themes",
+    "domain": "Core_UI",
+    "preconditions": "Adds support for custom color themes in loading spinner with gradient background",
+    "steps": [
+      "Test Adds support for custom color themes in loading spinner with gradient background"
+    ],
+    "expected_result": "Scenario passes with risk level LOW",
+    "hil_bench_tags": [
+      "src/ui/components/spinner.kt",
+      "config/color_themes.xml"
+    ],
+    "estimated_duration_seconds": 54,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "spinner",
+      "theming",
+      "animation"
+    ]
+  },
+  {
+    "id": "SCENARIO-TOOLKIT-THEME-001",
+    "title": "Theming: Dynamic Dark Mode Toggle",
+    "domain": "UI_Toolkit",
+    "preconditions": "Implements dynamic dark mode with real-time theme switching without app restart",
+    "steps": [
+      "Test Implements dynamic dark mode with real-time theme switching without app restart"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/theme/theme_manager.kt",
+      "config/dark_theme.xml"
+    ],
+    "estimated_duration_seconds": 84,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "theming",
+      "dark_mode",
+      "accessibility"
+    ]
+  },
+  {
+    "id": "SCENARIO-TOOLKIT-THEME-002",
+    "title": "Theming: Custom Color Palette Editor",
+    "domain": "UI_Toolkit",
+    "preconditions": "Adds in-app UI for editing custom color palettes with live preview of all components",
+    "steps": [
+      "Test Adds in-app UI for editing custom color palettes with live preview of all components"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/theme/palette_editor.kt",
+      "src/theme/theme_manager.c"
+    ],
+    "estimated_duration_seconds": 120,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "theming",
+      "customization",
+      "colors"
+    ]
+  },
+  {
+    "id": "SCENARIO-TOOLKIT-THEME-003",
+    "title": "Theming: System Theme Inheritance",
+    "domain": "UI_Toolkit",
+    "preconditions": "Automatically inherits color scheme from system settings (Android Material, iOS semantic colors)",
+    "steps": [
+      "Test Automatically inherits color scheme from system settings (Android Material, iOS semantic colors)"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/theme/system_theme.kt",
+      "src/platform/platform_api.c"
+    ],
+    "estimated_duration_seconds": 96,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "theming",
+      "system",
+      "platform"
+    ]
+  },
+  {
+    "id": "SCENARIO-TOOLKIT-FONT-001",
+    "title": "Font: Dynamic Text Scaling",
+    "domain": "UI_Toolkit",
+    "preconditions": "Implements dynamic text scaling based on system font size preferences (100%-200% range)",
+    "steps": [
+      "Test Implements dynamic text scaling based on system font size preferences (100%-200% range)"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/typography/font_scaler.kt",
+      "config/text_scales.h"
+    ],
+    "estimated_duration_seconds": 90,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "font",
+      "accessibility",
+      "scaling"
+    ]
+  },
+  {
+    "id": "SCENARIO-TOOLKIT-FONT-002",
+    "title": "Font: Custom Font Loading with Fallback",
+    "domain": "UI_Toolkit",
+    "preconditions": "Loads custom fonts with graceful fallback to system fonts when unavailable",
+    "steps": [
+      "Test Loads custom fonts with graceful fallback to system fonts when unavailable"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/typography/font_loader.kt",
+      "res/fonts/",
+      "src/font/fallback.c"
+    ],
+    "estimated_duration_seconds": 78,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "font",
+      "loading",
+      "fallback"
+    ]
+  },
+  {
+    "id": "SCENARIO-TOOLKIT-FONT-003",
+    "title": "Font: Variable Font Weight Support",
+    "domain": "UI_Toolkit",
+    "preconditions": "Implements support for variable font weights (100-900) with single font file",
+    "steps": [
+      "Test Implements support for variable font weights (100-900) with single font file"
+    ],
+    "expected_result": "Scenario passes with risk level LOW",
+    "hil_bench_tags": [
+      "src/typography/variable_fonts.kt",
+      "res/fonts/variable/"
+    ],
+    "estimated_duration_seconds": 48,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "font",
+      "variable",
+      "typography"
+    ]
+  },
+  {
+    "id": "SCENARIO-TOOLKIT-LAYOUT-001",
+    "title": "Layout: Responsive Grid System",
+    "domain": "UI_Toolkit",
+    "preconditions": "Implements 12-column responsive grid that adapts to different screen sizes",
+    "steps": [
+      "Test Implements 12-column responsive grid that adapts to different screen sizes"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/layout/grid_system.kt",
+      "config/breakpoints.h"
+    ],
+    "estimated_duration_seconds": 120,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "layout",
+      "responsive",
+      "grid"
+    ]
+  },
+  {
+    "id": "SCENARIO-TOOLKIT-LAYOUT-002",
+    "title": "Layout: Flexbox Engine",
+    "domain": "UI_Toolkit",
+    "preconditions": "Implements lightweight flexbox layout engine for declarative UI composition",
+    "steps": [
+      "Test Implements lightweight flexbox layout engine for declarative UI composition"
+    ],
+    "expected_result": "Scenario passes with risk level HIGH",
+    "hil_bench_tags": [
+      "src/layout/flexbox.c",
+      "src/layout/layout_engine.c"
+    ],
+    "estimated_duration_seconds": 168,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "layout",
+      "flexbox",
+      "performance"
+    ]
+  },
+  {
+    "id": "SCENARIO-TOOLKIT-LAYOUT-003",
+    "title": "Layout: Safe Area and Notch Handling",
+    "domain": "UI_Toolkit",
+    "preconditions": "Automatically adjusts layout for safe area insets and device notches",
+    "steps": [
+      "Test Automatically adjusts layout for safe area insets and device notches"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/layout/safe_area.kt",
+      "src/platform/device_info.c"
+    ],
+    "estimated_duration_seconds": 84,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "layout",
+      "safe_area",
+      "notch"
+    ]
+  },
+  {
+    "id": "SCENARIO-TOOLKIT-ANIM-001",
+    "title": "Animation: Keyframe Animator with Easing",
+    "domain": "UI_Toolkit",
+    "preconditions": "Implements keyframe-based animator with 20+ easing functions (ease-in, ease-out, cubic-bezier)",
+    "steps": [
+      "Test Implements keyframe-based animator with 20+ easing functions (ease-in, ease-out, cubic-bezier)"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/animation/keyframe_animator.c",
+      "config/easing_functions.h"
+    ],
+    "estimated_duration_seconds": 114,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "animation",
+      "easing",
+      "keyframe"
+    ]
+  },
+  {
+    "id": "SCENARIO-TOOLKIT-ANIM-002",
+    "title": "Animation: Spring Physics Animation",
+    "domain": "UI_Toolkit",
+    "preconditions": "Adds realistic spring-based animations with configurable stiffness and damping",
+    "steps": [
+      "Test Adds realistic spring-based animations with configurable stiffness and damping"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/animation/spring_animator.c",
+      "src/physics/spring_model.c"
+    ],
+    "estimated_duration_seconds": 102,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "animation",
+      "spring",
+      "physics"
+    ]
+  },
+  {
+    "id": "SCENARIO-TOOLKIT-GESTURE-001",
+    "title": "Gesture: Multi-touch Gesture Recognition",
+    "domain": "UI_Toolkit",
+    "preconditions": "Implements multi-touch gesture detection (pinch, rotate, pan) with configurable thresholds",
+    "steps": [
+      "Test Implements multi-touch gesture detection (pinch, rotate, pan) with configurable thresholds"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/gesture/gesture_detector.c",
+      "src/input/touch_handler.c"
+    ],
+    "estimated_duration_seconds": 132,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "gesture",
+      "multitouch",
+      "input"
+    ]
+  },
+  {
+    "id": "SCENARIO-TOOLKIT-GESTURE-002",
+    "title": "Gesture: Long Press Detection",
+    "domain": "UI_Toolkit",
+    "preconditions": "Adds configurable long press gesture detection with visual feedback duration",
+    "steps": [
+      "Test Adds configurable long press gesture detection with visual feedback duration"
+    ],
+    "expected_result": "Scenario passes with risk level LOW",
+    "hil_bench_tags": [
+      "src/gesture/long_press.c",
+      "src/input/touch_handler.c"
+    ],
+    "estimated_duration_seconds": 54,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "gesture",
+      "long_press",
+      "input"
+    ]
+  },
+  {
+    "id": "SCENARIO-TOOLKIT-A11Y-001",
+    "title": "Accessibility: Screen Reader Integration",
+    "domain": "UI_Toolkit",
+    "preconditions": "Integrates screen reader support with semantic labels and content descriptions",
+    "steps": [
+      "Test Integrates screen reader support with semantic labels and content descriptions"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/accessibility/screen_reader.c",
+      "src/accessibility/semantics.h"
+    ],
+    "estimated_duration_seconds": 120,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "accessibility",
+      "screen_reader",
+      "ARIA"
+    ]
+  },
+  {
+    "id": "SCENARIO-TOOLKIT-A11Y-002",
+    "title": "Accessibility: Focus Management",
+    "domain": "UI_Toolkit",
+    "preconditions": "Implements keyboard focus management with visual focus indicators and tab order",
+    "steps": [
+      "Test Implements keyboard focus management with visual focus indicators and tab order"
+    ],
+    "expected_result": "Scenario passes with risk level MEDIUM",
+    "hil_bench_tags": [
+      "src/accessibility/focus_manager.c",
+      "src/input/keyboard_handler.c"
+    ],
+    "estimated_duration_seconds": 96,
+    "languages_tested": [
+      "EN"
+    ],
+    "keywords": [
+      "accessibility",
+      "focus",
+      "keyboard"
+    ]
+  }
+]

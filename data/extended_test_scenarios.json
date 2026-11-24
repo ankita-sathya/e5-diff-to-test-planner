@@ -1,0 +1,485 @@
+{
+  "scenarios": [
+    {
+      "id": "SCENARIO-CLUSTER-001",
+      "domain": "Digital_Cluster",
+      "title": "CAN Signal Scaling: Speed Range Expansion (0-255 → 0-300 km/h)",
+      "description": "Vehicle firmware updates speedometer maximum range from 255 km/h to 300 km/h. Requires scaling factor change in CAN signal handler and UI update.",
+      "affected_files": [
+        "src/can/speedometer.c",
+        "src/ui/cluster.xml",
+        "config/can_signals.h"
+      ],
+      "code_change": {
+        "type": "parameter_range_change",
+        "details": "scale_factor = 300 / 255; max_speed_kmh = 300",
+        "risk_areas": ["signal_scaling", "display_rendering", "physical_validation"]
+      },
+      "related_tests": ["XRAY-1001", "XRAY-1002", "XRAY-1003"],
+      "expected_risk": "HIGH",
+      "keywords": ["CAN", "speedometer", "scaling", "range", "firmware"],
+      "vehicle_domains": ["cluster", "instrument_panel"],
+      "testing_areas": [
+        "Speedometer display 0-50 km/h (accuracy check)",
+        "Speedometer display 50-150 km/h (mid-range validation)",
+        "Speedometer edge case 300 km/h (maximum boundary)",
+        "Smooth needle animation across range",
+        "CAN frame parsing for scaled values"
+      ]
+    },
+    {
+      "id": "SCENARIO-CLUSTER-002",
+      "domain": "Digital_Cluster",
+      "title": "Multilingual Text Truncation: German/Japanese Cockpit Warnings",
+      "description": "Layout XML changes on curved 7-inch cluster display cause text overflow in German and Japanese. Font size reduction from 12px to 10px and width constraint (auto → 95%) introduced.",
+      "affected_files": [
+        "res/layout/cluster_warnings_de.xml",
+        "res/layout/cluster_warnings_ja.xml",
+        "src/ui/text_rendering.c",
+        "res/font/NotoSansCJK-Bold.ttf"
+      ],
+      "code_change": {
+        "type": "layout_rendering_change",
+        "details": "font-size 12px → 10px; width auto → 95%; text-overflow hidden",
+        "risk_areas": ["text_measurement", "layout_caching", "glyph_rendering"]
+      },
+      "related_tests": ["XRAY-1004", "XRAY-1005", "XRAY-1006"],
+      "expected_risk": "HIGH",
+      "keywords": ["I18N", "truncation", "Japanese", "German", "layout", "curved display"],
+      "vehicle_domains": ["cluster", "HMI", "localization"],
+      "testing_areas": [
+        "German text rendering: 'Batterie wird geladen' (20 chars)",
+        "Japanese kanji: '警告: 冷却液温度が高い' (truncation check)",
+        "Mixed CJK in single warning (Chinese/Japanese/Korean)",
+        "Line wrapping behavior on 7-inch curved panel",
+        "Font fallback chain validation"
+      ]
+    },
+    {
+      "id": "SCENARIO-CLUSTER-003",
+      "domain": "Digital_Cluster",
+      "title": "Gauge Animation Performance: Fuel Needle Timing Change",
+      "description": "Fuel gauge needle animation duration reduced from 500ms to 350ms for snappier response. Changes in animation.xml and gauge rendering engine.",
+      "affected_files": [
+        "src/ui/gauges.kt",
+        "res/anim/fuel_gauge.xml",
+        "src/render/animation_engine.c"
+      ],
+      "code_change": {
+        "type": "timing_change",
+        "details": "animation_duration = 350ms (was 500ms); interpolation_curve cubic-bezier",
+        "risk_areas": ["thread_contention", "frame_rate_stability", "battery_drain"]
+      },
+      "related_tests": ["XRAY-1007", "XRAY-1008", "XRAY-1009"],
+      "expected_risk": "MEDIUM",
+      "keywords": ["animation", "performance", "gauge", "timing", "frame_rate"],
+      "vehicle_domains": ["cluster", "gauge", "animation"],
+      "testing_areas": [
+        "Fuel gauge animation smoothness (60 fps target)",
+        "Frame rate stability during rapid refueling updates",
+        "Thread contention under concurrent gauge updates",
+        "Power consumption impact (battery drain measurement)",
+        "Animation interruption and restart scenarios"
+      ]
+    },
+    {
+      "id": "SCENARIO-SOMEIP-001",
+      "domain": "SOMEIP_Service_Discovery",
+      "title": "SOME/IP-SD TTL Timeout Extension: 3s → 5s",
+      "description": "Service discovery timeout increased from 3 seconds to 5 seconds to improve reliability on slow networks. Affects failover behavior and service availability detection.",
+      "affected_files": [
+        "src/someip/sd_timer.c",
+        "config/someip_config.h",
+        "src/network/failover.c"
+      ],
+      "code_change": {
+        "type": "configuration_change",
+        "details": "#define TTL_TIMEOUT_MS 5000  // was 3000ms",
+        "risk_areas": ["failover_timing", "service_availability", "network_partitions"]
+      },
+      "related_tests": ["XRAY-2001", "XRAY-2002", "XRAY-2003"],
+      "expected_risk": "MEDIUM",
+      "keywords": ["SOMEIP", "SDT", "TTL", "timeout", "failover", "service_discovery"],
+      "vehicle_domains": ["communication", "middleware", "networking"],
+      "testing_areas": [
+        "Service availability detection latency after timeout",
+        "Failover to secondary node timing",
+        "Network partition handling (service unreachable)",
+        "Multiple simultaneous service timeouts",
+        "TTL countdown accuracy under load"
+      ]
+    },
+    {
+      "id": "SCENARIO-SOMEIP-002",
+      "domain": "SOMEIP_Service_Discovery",
+      "title": "SOME/IP Protocol Version Upgrade: v1.1 → v1.2",
+      "description": "Protocol upgrade introduces new payload encoding format and additional validation fields. Must maintain backward compatibility with legacy nodes.",
+      "affected_files": [
+        "src/someip/encoder.c",
+        "src/someip/decoder.c",
+        "src/someip/protocol_defs.h",
+        "config/protocol_version.h"
+      ],
+      "code_change": {
+        "type": "protocol_change",
+        "details": "Protocol version flag 0x10 → 0x11; new validation fields; compression option",
+        "risk_areas": ["payload_parsing", "version_negotiation", "backward_compatibility"]
+      },
+      "related_tests": ["XRAY-2004", "XRAY-2005", "XRAY-2006"],
+      "expected_risk": "HIGH",
+      "keywords": ["SOMEIP", "protocol", "version", "compatibility", "encoding"],
+      "vehicle_domains": ["communication", "middleware"],
+      "testing_areas": [
+        "v1.1 ↔ v1.2 node communication",
+        "Payload format correctness (v1.2)",
+        "New field validation and error handling",
+        "Mixed version network coexistence",
+        "Compression/decompression correctness",
+        "Protocol version negotiation sequence"
+      ]
+    },
+    {
+      "id": "SCENARIO-SOMEIP-003",
+      "domain": "SOMEIP_Service_Discovery",
+      "title": "SOME/IP Message Queue Capacity Increase: 256 → 512",
+      "description": "Increased message queue buffer for high-frequency services (audio, navigation updates). Requires validation of memory footprint and queue overflow handling.",
+      "affected_files": [
+        "src/someip/queue.c",
+        "config/buffer_config.h",
+        "src/memory/heap_manager.c"
+      ],
+      "code_change": {
+        "type": "buffer_increase",
+        "details": "#define QUEUE_SIZE 512  // was 256; sizeof(queue) now 2MB",
+        "risk_areas": ["memory_footprint", "queue_overflow", "latency_variance"]
+      },
+      "related_tests": ["XRAY-2007", "XRAY-2008", "XRAY-2009"],
+      "expected_risk": "MEDIUM",
+      "keywords": ["SOMEIP", "queue", "buffer", "memory", "throughput"],
+      "vehicle_domains": ["communication", "memory_management"],
+      "testing_areas": [
+        "High-frequency message throughput (1000+ msg/s)",
+        "Memory footprint delta validation (< 2.5 MB increase)",
+        "Queue overflow handling and error reporting",
+        "Latency variance with full queue",
+        "Garbage collection impact on queue operations"
+      ]
+    },
+    {
+      "id": "SCENARIO-CAN-001",
+      "domain": "CANFD_Gateway",
+      "title": "CAN-FD Signal Routing: New Diagnostic Signal Path",
+      "description": "New signal 0x600 (diagnostic telemetry) routed to cluster display (0x700). Requires routing table update and CAN-FD frame encapsulation validation.",
+      "affected_files": [
+        "src/can/routing_table.c",
+        "src/can/frame_handlers.c",
+        "config/can_routing.csv"
+      ],
+      "code_change": {
+        "type": "routing_table_update",
+        "details": "routing_table[0x600] = {dest: 0x700, format: CAN-FD, dlc: 64}",
+        "risk_areas": ["signal_routing", "frame_format", "cross_domain_integration"]
+      },
+      "related_tests": ["XRAY-3001", "XRAY-3002", "XRAY-3003"],
+      "expected_risk": "HIGH",
+      "keywords": ["CAN-FD", "routing", "diagnostic", "signal", "gateway"],
+      "vehicle_domains": ["communication", "gateway", "diagnostics"],
+      "testing_areas": [
+        "Signal routing correctness (0x600 → 0x700)",
+        "CAN-FD frame encapsulation and unpacking",
+        "Signal format preservation across domain boundary",
+        "Timing: gateway latency < 10ms",
+        "Error handling for malformed frames"
+      ]
+    },
+    {
+      "id": "SCENARIO-CAN-002",
+      "domain": "CANFD_Gateway",
+      "title": "CAN Gateway Error Frame Timeout: 100ms → 50ms",
+      "description": "Faster error detection timeout improves system recovery speed. Reduces bus hang risk but may increase false-positive error reports.",
+      "affected_files": [
+        "src/can/error_handler.c",
+        "config/timing.h",
+        "tests/can_error_injection.c"
+      ],
+      "code_change": {
+        "type": "timing_change",
+        "details": "#define ERROR_TIMEOUT_MS 50  // was 100ms; affects recovery state machine",
+        "risk_areas": ["error_detection", "bus_recovery", "false_positives"]
+      },
+      "related_tests": ["XRAY-3004", "XRAY-3005", "XRAY-3006"],
+      "expected_risk": "MEDIUM",
+      "keywords": ["CAN", "error_handling", "timeout", "recovery", "reliability"],
+      "vehicle_domains": ["communication", "error_handling"],
+      "testing_areas": [
+        "Error detection latency (should be ~50ms)",
+        "Bus recovery sequence after error",
+        "Missed frame detection and reporting",
+        "False positive error rate under noise",
+        "Recovery state machine transitions"
+      ]
+    },
+    {
+      "id": "SCENARIO-CAN-003",
+      "domain": "CANFD_Gateway",
+      "title": "CAN Gateway Segmented Message Reassembly",
+      "description": "Long diagnostic response split across 4 CAN frames. Requires out-of-order handling and timeout-based frame reassembly.",
+      "affected_files": [
+        "src/can/segmentation.c",
+        "src/can/reassembly_buffer.c",
+        "config/segmentation_config.h"
+      ],
+      "code_change": {
+        "type": "new_feature",
+        "details": "new function reassemble_segmented_frame(); 4-frame buffer; 500ms timeout",
+        "risk_areas": ["frame_ordering", "memory_allocation", "timeout_handling"]
+      },
+      "related_tests": ["XRAY-3007", "XRAY-3008", "XRAY-3009"],
+      "expected_risk": "HIGH",
+      "keywords": ["CAN", "segmentation", "reassembly", "multi_frame", "diagnostic"],
+      "vehicle_domains": ["communication", "diagnostics"],
+      "testing_areas": [
+        "Multi-frame message assembly (in-order)",
+        "Out-of-order frame handling and sorting",
+        "Timeout for incomplete frames (500ms)",
+        "Duplicate frame handling",
+        "Memory cleanup after successful/failed reassembly"
+      ]
+    },
+    {
+      "id": "SCENARIO-AAOS-001",
+      "domain": "AAOS_Media_Navigation",
+      "title": "Android Automotive Media Service IPC Update",
+      "description": "New onPlaybackStateChanged() callback added to media service. Changes AIDL contract and listener registration.",
+      "affected_files": [
+        "src/aaos/MediaServiceImpl.kt",
+        "src/aaos/interfaces/IMediaListener.aidl",
+        "src/aaos/MediaListenerProxy.kt"
+      ],
+      "code_change": {
+        "type": "interface_addition",
+        "details": "new interface method onPlaybackStateChanged(@Nullable PlaybackState state)",
+        "risk_areas": ["null_safety", "callback_ordering", "backward_compatibility"]
+      },
+      "related_tests": ["XRAY-4001", "XRAY-4002", "XRAY-4003"],
+      "expected_risk": "HIGH",
+      "keywords": ["AAOS", "Android", "media_service", "callback", "IPC"],
+      "vehicle_domains": ["AAOS", "media", "entertainment"],
+      "testing_areas": [
+        "Media playback state transitions (PLAYING → PAUSED → STOPPED)",
+        "Null safety for new callback parameter",
+        "Listener registration and deregistration",
+        "Multiple simultaneous listeners",
+        "Backward compatibility with older AAOS versions"
+      ]
+    },
+    {
+      "id": "SCENARIO-AAOS-002",
+      "domain": "AAOS_Media_Navigation",
+      "title": "Bluetooth Audio Codec Support: LDAC Addition",
+      "description": "Support for LDAC codec (high-quality Bluetooth audio) alongside existing SBC/AAC. Requires codec negotiation and fallback chain.",
+      "affected_files": [
+        "src/aaos/BluetoothAudioImpl.kt",
+        "config/audio_codecs.xml",
+        "src/audio/codec_registry.c"
+      ],
+      "code_change": {
+        "type": "feature_addition",
+        "details": "add LDAC to codec_priority_list; reorder: [LDAC, AAC, SBC]",
+        "risk_areas": ["codec_negotiation", "audio_quality", "compatibility"]
+      },
+      "related_tests": ["XRAY-4004", "XRAY-4005", "XRAY-4006"],
+      "expected_risk": "MEDIUM",
+      "keywords": ["Bluetooth", "audio", "codec", "LDAC", "quality"],
+      "vehicle_domains": ["AAOS", "audio", "bluetooth"],
+      "testing_areas": [
+        "Codec fallback chain: LDAC → AAC → SBC",
+        "Audio quality metric validation (bitrate, latency)",
+        "Codec mismatch error handling",
+        "Bluetooth pairing with codec negotiation",
+        "Audio glitch-free codec switching"
+      ]
+    },
+    {
+      "id": "SCENARIO-AAOS-003",
+      "domain": "AAOS_Media_Navigation",
+      "title": "Navigation Runtime Permission: Fine Location (API 34+)",
+      "description": "Android 14 (API 34) introduces fine-grained location permission tier. Navigation must handle denial gracefully and fallback to coarse location.",
+      "affected_files": [
+        "src/aaos/NavigationImpl.kt",
+        "AndroidManifest.xml",
+        "src/ui/permission_dialog.xml"
+      ],
+      "code_change": {
+        "type": "permission_handling",
+        "details": "new permission ACCESS_FINE_LOCATION; fallback: coarseLocationProvider.getLocation()",
+        "risk_areas": ["permission_checks", "fallback_routing", "user_feedback"]
+      },
+      "related_tests": ["XRAY-4007", "XRAY-4008", "XRAY-4009"],
+      "expected_risk": "MEDIUM",
+      "keywords": ["Android", "permissions", "location", "API34", "privacy"],
+      "vehicle_domains": ["AAOS", "navigation", "permissions"],
+      "testing_areas": [
+        "Permission grant/deny state machine",
+        "Fallback to coarse location when denied",
+        "Navigation accuracy with coarse location",
+        "Permission re-request logic",
+        "User feedback for permission denial"
+      ]
+    },
+    {
+      "id": "SCENARIO-UDS-001",
+      "domain": "UDS_Diagnostics",
+      "title": "UDS Diagnostic Session: Extended FOTA Session (0x11)",
+      "description": "New diagnostic session ID 0x11 for firmware-over-the-air (FOTA) updates. Requires session transition validation and security access in extended mode.",
+      "affected_files": [
+        "src/diag/session_handler.c",
+        "config/diag_sessions.h",
+        "src/diag/security_access.c"
+      ],
+      "code_change": {
+        "type": "session_addition",
+        "details": "#define DIAG_SESSION_EXTENDED_FOTA 0x11; new UDS services for FOTA",
+        "risk_areas": ["session_transition", "security_access", "FOTA_protocol"]
+      },
+      "related_tests": ["XRAY-5001", "XRAY-5002", "XRAY-5003"],
+      "expected_risk": "CRITICAL",
+      "keywords": ["UDS", "diagnostic", "session", "FOTA", "firmware"],
+      "vehicle_domains": ["diagnostics", "OTA", "security"],
+      "testing_areas": [
+        "Session transition: Default → Extended FOTA",
+        "Security access in extended session (seed/key)",
+        "FOTA data transfer protocol (Download Service 0x34)",
+        "CRC validation for firmware payload",
+        "Session exit and system state recovery"
+      ]
+    },
+    {
+      "id": "SCENARIO-UDS-002",
+      "domain": "UDS_Diagnostics",
+      "title": "UDS Data Identifier: OTA Update Status (0xF194)",
+      "description": "New DID for real-time firmware update progress tracking. 4-byte status structure with state machine and error codes.",
+      "affected_files": [
+        "src/diag/did_handler.c",
+        "config/did_definitions.h",
+        "src/ota/update_status.c"
+      ],
+      "code_change": {
+        "type": "did_addition",
+        "details": "new DID 0xF194: { state_enum:u8, progress_pct:u8, error_code:u16 }",
+        "risk_areas": ["state_machine", "error_reporting", "progress_accuracy"]
+      },
+      "related_tests": ["XRAY-5004", "XRAY-5005", "XRAY-5006"],
+      "expected_risk": "HIGH",
+      "keywords": ["UDS", "DID", "OTA", "status", "diagnostic"],
+      "vehicle_domains": ["diagnostics", "OTA", "firmware"],
+      "testing_areas": [
+        "DID read request formatting (22 F1 94)",
+        "OTA progress state machine (IDLE → IN_PROGRESS → COMPLETE)",
+        "Progress percentage accuracy (0-100%)",
+        "Error code reporting on FOTA failure",
+        "Status update frequency validation"
+      ]
+    },
+    {
+      "id": "SCENARIO-UDS-003",
+      "domain": "UDS_Diagnostics",
+      "title": "UDS Security Access: Seed/Key Algorithm v1 → v2",
+      "description": "Cryptographic seed/key algorithm upgraded for improved security. Changes Request Seed (0x27 0x01) and Send Key (0x27 0x02) flow.",
+      "affected_files": [
+        "src/diag/security_access.c",
+        "src/crypto/seed_key_algo.c",
+        "config/security_config.h"
+      ],
+      "code_change": {
+        "type": "algorithm_change",
+        "details": "new seed generation (SHA-256 based); key derivation KDF v2",
+        "risk_areas": ["seed_randomness", "key_calculation", "brute_force_resistance"]
+      },
+      "related_tests": ["XRAY-5007", "XRAY-5008", "XRAY-5009"],
+      "expected_risk": "CRITICAL",
+      "keywords": ["UDS", "security", "cryptography", "seed", "key"],
+      "vehicle_domains": ["diagnostics", "security"],
+      "testing_areas": [
+        "Seed generation randomness (entropy test)",
+        "Key calculation correctness (known test vectors)",
+        "Brute-force resistance (key space: 2^128+)",
+        "Session-specific seed generation",
+        "Seed expiration timeout (30 seconds)"
+      ]
+    },
+    {
+      "id": "SCENARIO-I18N-001",
+      "domain": "Multilingual_HMI_DE_EN_JP",
+      "title": "HMI Text Measurement Cache: Glyph Metrics Pre-computation",
+      "description": "Pre-computed glyph metrics for German and Japanese text rendering improves layout performance. Uses memory-mapped binary cache files.",
+      "affected_files": [
+        "src/i18n/text_metrics.c",
+        "res/data/glyph_cache_de.bin",
+        "res/data/glyph_cache_ja.bin",
+        "src/render/font_loader.c"
+      ],
+      "code_change": {
+        "type": "caching_optimization",
+        "details": "mmap glyph_cache_de.bin; lazy_load on first access; validate cache_version",
+        "risk_areas": ["cache_coherency", "file_corruption", "font_fallback"]
+      },
+      "related_tests": ["XRAY-6001", "XRAY-6002", "XRAY-6003"],
+      "expected_risk": "MEDIUM",
+      "keywords": ["I18N", "text_rendering", "cache", "glyph", "German", "Japanese"],
+      "vehicle_domains": ["HMI", "localization", "text_rendering"],
+      "testing_areas": [
+        "German compound word layout ('Batterie': 7 chars)",
+        "Japanese hiragana rendering (e.g., 'ひらがな')",
+        "Japanese kanji rendering (e.g., '警告')",
+        "Mixed CJK text alignment",
+        "Cache invalidation and rebuild on font update"
+      ]
+    },
+    {
+      "id": "SCENARIO-I18N-002",
+      "domain": "Multilingual_HMI_DE_EN_JP",
+      "title": "HMI Right-to-Left Text Support: Arabic/Hebrew Prep",
+      "description": "Foundation for future Arabic/Hebrew support. Implements BiDi algorithm and RTL text flow direction enum.",
+      "affected_files": [
+        "src/i18n/layout_engine.c",
+        "src/ui/text_view.xml",
+        "config/text_direction.h"
+      ],
+      "code_change": {
+        "type": "feature_foundation",
+        "details": "new enum TEXT_DIRECTION {LTR, RTL}; BiDi algorithm implementation",
+        "risk_areas": ["text_direction", "number_formatting", "mixed_content"]
+      },
+      "related_tests": ["XRAY-6004", "XRAY-6005", "XRAY-6006"],
+      "expected_risk": "HIGH",
+      "keywords": ["I18N", "RTL", "BiDi", "Arabic", "Hebrew", "layout"],
+      "vehicle_domains": ["HMI", "localization"],
+      "testing_areas": [
+        "RTL text alignment verification (right-justified)",
+        "Mixed LTR/RTL content (e.g., 'Hello مرحبا')",
+        "Number formatting in RTL context (1000 → 'الف')",
+        "BiDi algorithm correctness (Unicode standard)",
+        "Layout mirroring for RTL UI elements"
+      ]
+    }
+  ],
+  "meta": {
+    "total_scenarios": 16,
+    "domains": 6,
+    "coverage": {
+      "Digital_Cluster": 3,
+      "SOMEIP_Service_Discovery": 3,
+      "CANFD_Gateway": 3,
+      "AAOS_Media_Navigation": 3,
+      "UDS_Diagnostics": 3,
+      "Multilingual_HMI": 2
+    },
+    "risk_distribution": {
+      "CRITICAL": 2,
+      "HIGH": 8,
+      "MEDIUM": 6
+    },
+    "created_at": "2026-11-23"
+  }
+}

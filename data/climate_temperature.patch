@@ -1,0 +1,9 @@
+diff --git a/apps/climate/TemperatureController.kt b/apps/climate/TemperatureController.kt
+index 1234567..abcdef0 100644
+--- a/apps/climate/TemperatureController.kt
++++ b/apps/climate/TemperatureController.kt
+@@ -10,3 +10,3 @@
+ fun restoreZoneSettings() {
+-    passengerTemperature = defaultTemperature
++    passengerTemperature = savedPassengerTemperature
+ }

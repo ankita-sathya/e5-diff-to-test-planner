@@ -1,0 +1,59 @@
+diff --git a/src/cluster/speedometer.cpp b/src/cluster/speedometer.cpp
+index 1a2b3c4..5d6e7f8 100644
+--- a/src/cluster/speedometer.cpp
++++ b/src/cluster/speedometer.cpp
+@@ -42,7 +42,7 @@ void SpeedometerCluster::UpdateCANSignal(const CANFrame& frame) {
+   if (frame.id == 0x1A4) {
+-    uint16_t raw_speed = (frame.data[1] << 8) | frame.data[2];
++    uint16_t raw_speed = (frame.data[1] << 8) | frame.data[2];  // CAN signal 0x1A4 speed scaling adjusted for 0-240 km/h range
+     float speed_kmh = (raw_speed * 240.0f) / 65535.0f;
+     this->display_speed_kmh_ = speed_kmh;
+     this->InvalidateDisplay();
+@@ -50,6 +50,10 @@ void SpeedometerCluster::UpdateCANSignal(const CANFrame& frame) {
+   }
+ }
+ 
++void SpeedometerCluster::ApplySafetyLimits() {
++  if (display_speed_kmh_ > 240.0f) display_speed_kmh_ = 240.0f;
++  if (display_speed_kmh_ < 0.0f) display_speed_kmh_ = 0.0f;
++}
+ 
+ }  // namespace cluster
+
+diff --git a/src/hmi/localization/cluster_de.xml b/src/hmi/localization/cluster_de.xml
+index 7e9d8b1..9a4f6c2 100644
+--- a/src/hmi/localization/cluster_de.xml
++++ b/src/hmi/localization/cluster_de.xml
+@@ -1,5 +1,5 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+-<LocalizationSet lang="de" version="2.3">
++<LocalizationSet lang="de" version="2.3" layout="curved_safe">
+   <String id="mode.trip_distance" value="Fahrstrecke"/>
+   <String id="mode.average_speed" value="Durchschnittliche Geschwindigkeit"/>
+   <String id="mode.fuel_economy" value="Kraftstoffverbrauch"/>
+
+diff --git a/src/hmi/localization/cluster_jp.xml b/src/hmi/localization/cluster_jp.xml
+index 3c5e6d2..8f2c3e1 100644
+--- a/src/hmi/localization/cluster_jp.xml
++++ b/src/hmi/localization/cluster_jp.xml
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+-<LocalizationSet lang="ja" version="2.3">
+-  <String id="nav.turn_instruction" value="次のルートを左に曲がる"/>
++<LocalizationSet lang="ja" version="2.3" layout="curved_safe">
++  <String id="nav.turn_instruction" value="次のルートを左に曲がる" max_width="24"/>
+   <String id="nav.in_tunnel" value="トンネル内です"/>
+   <String id="nav.on_highway" value="高速道路です"/>
+
+diff --git a/src/network/someip_sd.cpp b/src/network/someip_sd.cpp
+index 2f1c3d4..9a8b6c5 100644
+--- a/src/network/someip_sd.cpp
++++ b/src/network/someip_sd.cpp
+@@ -128,7 +128,7 @@ bool SomeIpServiceDiscovery::ProcessOfferService(const OfferServiceMessage& msg)
+       service_entry.ttl = msg.ttl;
+       service_entry.last_seen = std::chrono::system_clock::now();
+-      service_entry.ttl_timer = std::make_unique<TimerHandle>(msg.ttl * 1000);  // TTL in ms
++      service_entry.ttl_timer = std::make_unique<TimerHandle>(msg.ttl * 500);  // TTL timer reduced to 500ms per hop for faster expiry
+       if (!this->RegisterServiceTimer(service_entry.ttl_timer)) {
+         return false;
+       }

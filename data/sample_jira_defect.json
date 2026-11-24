@@ -1,0 +1,11 @@
+{
+  "id": "BUG-4092",
+  "summary": "Japanese kanji truncation on curved cockpit navigation banner during incoming call",
+  "description": "When an incoming call notification arrives while navigating with Japanese language (日本語), the navigation instruction text on the curved cluster display becomes truncated. The kanji characters for the route instruction (次のルートを左に曲がる) are clipped at the edge of the banner overlay, making the instruction illegible.\n\nSteps to reproduce:\n1. Set HMI language to 日本語\n2. Activate navigation with a turn instruction\n3. Trigger an incoming call notification\n4. Observe kanji truncation on curved display\n\nExpected: Japanese text should render without clipping even with overlay\nActual: Characters clipped at banner edge",
+  "environment": "Curved cluster display, 日本語 locale, cluster firmware v2.3+, AAOS active",
+  "severity": "HIGH",
+  "status": "OPEN",
+  "created_date": "2024-11-18",
+  "domain": "Digital_Cluster_Speedometer",
+  "affected_domains": ["Digital_Cluster_Speedometer", "Multilingual_HMI_DE_EN_JP", "AAOS_Media_Navigation"]
+}

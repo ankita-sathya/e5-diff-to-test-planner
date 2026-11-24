@@ -1,0 +1,774 @@
+{
+  "scenarios": [
+    {
+      "id": "SCENARIO-DRIVE-SPEED-001",
+      "domain": "Driving_Functions",
+      "title": "Speedometer Digital Display: Precision Range Extension",
+      "description": "Extends speedometer measurement precision from 1 km/h to 0.1 km/h increments for cruise control feedback",
+      "files": [
+        "src/drive/speedometer.c",
+        "config/measurement_precision.h"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.5,
+      "keywords": [
+        "speedometer",
+        "precision",
+        "CAN",
+        "display"
+      ]
+    },
+    {
+      "id": "SCENARIO-DRIVE-SPEED-002",
+      "domain": "Driving_Functions",
+      "title": "Cruise Control: Acceleration Ramp Rate",
+      "description": "Changes cruise control acceleration from linear to exponential ramp (0-100 km/h in 8s instead of 12s)",
+      "files": [
+        "src/drive/cruise_control.c",
+        "config/accel_profile.xml"
+      ],
+      "risk": "HIGH",
+      "time_saved": 2.3,
+      "keywords": [
+        "cruise_control",
+        "acceleration",
+        "safety"
+      ]
+    },
+    {
+      "id": "SCENARIO-DRIVE-SPEED-003",
+      "domain": "Driving_Functions",
+      "title": "Speed Governor: Maximum Limit Enforcement",
+      "description": "Adds regional speed governor limiting (120 km/h Germany, 130 km/h EU, 110 km/h China)",
+      "files": [
+        "src/drive/speed_governor.c",
+        "config/regional_limits.h"
+      ],
+      "risk": "CRITICAL",
+      "time_saved": 3.1,
+      "keywords": [
+        "governor",
+        "regional",
+        "safety",
+        "compliance"
+      ]
+    },
+    {
+      "id": "SCENARIO-DRIVE-BRAKE-001",
+      "domain": "Driving_Functions",
+      "title": "ABS (Anti-lock Braking): Modulation Frequency",
+      "description": "Increases ABS modulation from 10 Hz to 20 Hz for improved brake feel and shortened stopping distance",
+      "files": [
+        "src/brake/abs.c",
+        "config/brake_params.h"
+      ],
+      "risk": "HIGH",
+      "time_saved": 2.8,
+      "keywords": [
+        "ABS",
+        "braking",
+        "safety",
+        "modulation"
+      ]
+    },
+    {
+      "id": "SCENARIO-DRIVE-BRAKE-002",
+      "domain": "Driving_Functions",
+      "title": "Emergency Brake Assist: Pressure Ramp",
+      "description": "Optimizes emergency brake assist pressure application curve for faster panic stop response",
+      "files": [
+        "src/brake/emergency_assist.c",
+        "config/brake_curves.c"
+      ],
+      "risk": "CRITICAL",
+      "time_saved": 3.5,
+      "keywords": [
+        "emergency_brake",
+        "safety_critical",
+        "pressure"
+      ]
+    },
+    {
+      "id": "SCENARIO-DRIVE-BRAKE-003",
+      "domain": "Driving_Functions",
+      "title": "Hill Start Assist: Hold Duration",
+      "description": "Extends hill start assist hold time from 1s to 2s for driver comfort on steep grades",
+      "files": [
+        "src/brake/hill_start.c",
+        "src/drive/engine_control.c"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.4,
+      "keywords": [
+        "hill_start",
+        "gradient",
+        "comfort"
+      ]
+    },
+    {
+      "id": "SCENARIO-DRIVE-TRACTION-001",
+      "domain": "Driving_Functions",
+      "title": "Traction Control: Slip Threshold Adjustment",
+      "description": "Dynamically adjusts wheel slip threshold based on road surface detection (0.3% asphalt \u2192 1.2% gravel)",
+      "files": [
+        "src/traction/slip_control.c",
+        "src/sensors/surface_detect.c"
+      ],
+      "risk": "HIGH",
+      "time_saved": 2.6,
+      "keywords": [
+        "traction",
+        "slip",
+        "surface_detection"
+      ]
+    },
+    {
+      "id": "SCENARIO-DRIVE-TRACTION-002",
+      "domain": "Driving_Functions",
+      "title": "Engine Power Reduction: Torque Limiting",
+      "description": "Reduces engine torque output during traction control activation to improve wheel grip on low-friction surfaces",
+      "files": [
+        "src/engine/torque_limiter.c",
+        "src/traction/engine_interface.c"
+      ],
+      "risk": "HIGH",
+      "time_saved": 2.4,
+      "keywords": [
+        "traction",
+        "torque",
+        "engine",
+        "power"
+      ]
+    },
+    {
+      "id": "SCENARIO-DRIVE-STEER-001",
+      "domain": "Driving_Functions",
+      "title": "Power Steering Assist: Speed-Dependent Mapping",
+      "description": "Implements progressive power steering assist that decreases with speed (100% at 0 \u2192 20% at 150 km/h)",
+      "files": [
+        "src/steering/power_steering.c",
+        "src/steering/assist_curve.h"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.9,
+      "keywords": [
+        "steering",
+        "assist",
+        "feedback"
+      ]
+    },
+    {
+      "id": "SCENARIO-DRIVE-STEER-002",
+      "domain": "Driving_Functions",
+      "title": "Lane Keep Assist: Steering Angle Correction",
+      "description": "Adjusts lane keeping correction from gentle guidance to aggressive lane centering based on driver input",
+      "files": [
+        "src/steering/lane_keep.c",
+        "config/correction_level.h"
+      ],
+      "risk": "HIGH",
+      "time_saved": 2.5,
+      "keywords": [
+        "lane_keep",
+        "steering",
+        "autonomous"
+      ]
+    },
+    {
+      "id": "SCENARIO-DRIVE-ENGINE-001",
+      "domain": "Driving_Functions",
+      "title": "Idle Speed Control: Temperature Compensation",
+      "description": "Improves idle speed stability with dynamic compensation for engine temperature changes",
+      "files": [
+        "src/engine/idle_speed.c",
+        "src/sensors/temp_sensor.c"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.3,
+      "keywords": [
+        "idle",
+        "engine",
+        "stability"
+      ]
+    },
+    {
+      "id": "SCENARIO-DRIVE-ENGINE-002",
+      "domain": "Driving_Functions",
+      "title": "Automatic Transmission: Shift Schedule Optimization",
+      "description": "Optimizes gear shift timing based on road conditions and driving style (eco/sport/normal modes)",
+      "files": [
+        "src/transmission/shift_schedule.c",
+        "config/drive_modes.h"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 2.0,
+      "keywords": [
+        "transmission",
+        "shift",
+        "efficiency"
+      ]
+    },
+    {
+      "id": "SCENARIO-DRIVE-ENGINE-003",
+      "domain": "Driving_Functions",
+      "title": "Engine Temperature: Cooling Fan Control",
+      "description": "Implements PWM-based cooling fan control for optimal temperature management and noise reduction",
+      "files": [
+        "src/engine/cooling_fan.c",
+        "config/temp_control.h"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.6,
+      "keywords": [
+        "cooling",
+        "temperature",
+        "fan"
+      ]
+    },
+    {
+      "id": "SCENARIO-DRIVE-FUEL-001",
+      "domain": "Driving_Functions",
+      "title": "Fuel Injection: Timing Optimization",
+      "description": "Optimizes fuel injection timing based on engine load and RPM for better combustion efficiency",
+      "files": [
+        "src/fuel/injection_timing.c",
+        "config/injection_map.c"
+      ],
+      "risk": "HIGH",
+      "time_saved": 2.2,
+      "keywords": [
+        "fuel",
+        "injection",
+        "efficiency"
+      ]
+    },
+    {
+      "id": "SCENARIO-DRIVE-FUEL-002",
+      "domain": "Driving_Functions",
+      "title": "Fuel Pump Pressure: Dynamic Regulation",
+      "description": "Dynamically adjusts fuel pump pressure based on engine demand to reduce power consumption",
+      "files": [
+        "src/fuel/pump_control.c",
+        "src/sensors/pressure_sensor.c"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.8,
+      "keywords": [
+        "fuel_pump",
+        "pressure",
+        "efficiency"
+      ]
+    },
+    {
+      "id": "SCENARIO-UI-BUTTON-001",
+      "domain": "Core_UI",
+      "title": "Button: Touch State Feedback Animation",
+      "description": "Adds haptic feedback and color transition animation for button press events (ripple effect)",
+      "files": [
+        "src/ui/components/button.kt",
+        "res/anim/button_ripple.xml"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.2,
+      "keywords": [
+        "button",
+        "animation",
+        "feedback"
+      ]
+    },
+    {
+      "id": "SCENARIO-UI-BUTTON-002",
+      "domain": "Core_UI",
+      "title": "Button: Accessibility State Indicators",
+      "description": "Adds visual indicators for button accessibility states (focused, disabled, loading) for screen readers",
+      "files": [
+        "src/ui/components/button.kt",
+        "src/accessibility/screen_reader.c"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.5,
+      "keywords": [
+        "accessibility",
+        "button",
+        "ARIA"
+      ]
+    },
+    {
+      "id": "SCENARIO-UI-INPUT-001",
+      "domain": "Core_UI",
+      "title": "Text Input: Real-time Validation Feedback",
+      "description": "Implements real-time character count, password strength meter, and format validation",
+      "files": [
+        "src/ui/components/text_input.kt",
+        "src/validation/input_validator.c"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.8,
+      "keywords": [
+        "text_input",
+        "validation",
+        "feedback"
+      ]
+    },
+    {
+      "id": "SCENARIO-UI-INPUT-002",
+      "domain": "Core_UI",
+      "title": "Text Input: Multilingual Keyboard Layout",
+      "description": "Dynamically switches keyboard layout (QWERTY/QWERTZ/AZERTY) based on input language",
+      "files": [
+        "src/ui/components/text_input.kt",
+        "config/keyboard_layouts.h"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.6,
+      "keywords": [
+        "keyboard",
+        "i18n",
+        "text_input"
+      ]
+    },
+    {
+      "id": "SCENARIO-UI-INPUT-003",
+      "domain": "Core_UI",
+      "title": "Text Input: Autocomplete Suggestion Engine",
+      "description": "Adds predictive text suggestions with Levenshtein distance algorithm for typo correction",
+      "files": [
+        "src/ui/components/text_input.kt",
+        "src/nlp/autocomplete.c"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 2.1,
+      "keywords": [
+        "autocomplete",
+        "suggestions",
+        "NLP"
+      ]
+    },
+    {
+      "id": "SCENARIO-UI-DIALOG-001",
+      "domain": "Core_UI",
+      "title": "Dialog: Fade In/Out Animation",
+      "description": "Implements smooth fade and scale animations for dialog appearance and dismissal",
+      "files": [
+        "src/ui/components/dialog.kt",
+        "res/anim/dialog_enter.xml"
+      ],
+      "risk": "LOW",
+      "time_saved": 0.8,
+      "keywords": [
+        "dialog",
+        "animation",
+        "modal"
+      ]
+    },
+    {
+      "id": "SCENARIO-UI-DIALOG-002",
+      "domain": "Core_UI",
+      "title": "Dialog: Keyboard Navigation",
+      "description": "Adds keyboard shortcut support (Tab for focus, Enter/Escape for confirm/cancel)",
+      "files": [
+        "src/ui/components/dialog.kt",
+        "src/input/keyboard_handler.c"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.4,
+      "keywords": [
+        "keyboard",
+        "navigation",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "SCENARIO-UI-LIST-001",
+      "domain": "Core_UI",
+      "title": "List: Virtual Scrolling for Large Datasets",
+      "description": "Implements virtualized list rendering for smooth scrolling with 10,000+ items",
+      "files": [
+        "src/ui/components/list.kt",
+        "src/rendering/virtual_scroll.c"
+      ],
+      "risk": "HIGH",
+      "time_saved": 2.3,
+      "keywords": [
+        "list",
+        "scrolling",
+        "performance"
+      ]
+    },
+    {
+      "id": "SCENARIO-UI-LIST-002",
+      "domain": "Core_UI",
+      "title": "List: Swipe Gestures for Actions",
+      "description": "Adds left/right swipe gestures to list items for delete, archive, or custom actions",
+      "files": [
+        "src/ui/components/list.kt",
+        "src/gesture/swipe_handler.c"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.7,
+      "keywords": [
+        "gesture",
+        "swipe",
+        "list"
+      ]
+    },
+    {
+      "id": "SCENARIO-UI-LIST-003",
+      "domain": "Core_UI",
+      "title": "List: Drag and Drop Reordering",
+      "description": "Enables drag-and-drop item reordering with visual feedback during drag operation",
+      "files": [
+        "src/ui/components/list.kt",
+        "src/gesture/drag_handler.c"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.9,
+      "keywords": [
+        "drag_drop",
+        "reorder",
+        "gesture"
+      ]
+    },
+    {
+      "id": "SCENARIO-UI-MENU-001",
+      "domain": "Core_UI",
+      "title": "Menu: Context Menu with Positioning",
+      "description": "Implements smart context menu positioning that avoids screen edges and respects keyboard focus",
+      "files": [
+        "src/ui/components/menu.kt",
+        "src/layout/position_calc.c"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.5,
+      "keywords": [
+        "menu",
+        "positioning",
+        "context"
+      ]
+    },
+    {
+      "id": "SCENARIO-UI-MENU-002",
+      "domain": "Core_UI",
+      "title": "Menu: Submenu Cascading with Keyboard",
+      "description": "Adds keyboard navigation for multi-level submenus with arrow key support",
+      "files": [
+        "src/ui/components/menu.kt",
+        "src/input/keyboard_handler.c"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.6,
+      "keywords": [
+        "menu",
+        "keyboard",
+        "navigation"
+      ]
+    },
+    {
+      "id": "SCENARIO-UI-PROGRESS-001",
+      "domain": "Core_UI",
+      "title": "Progress Bar: Indeterminate Loading State",
+      "description": "Implements animated indeterminate progress bar with customizable animation speed",
+      "files": [
+        "src/ui/components/progress_bar.kt",
+        "res/anim/progress_indeterminate.xml"
+      ],
+      "risk": "LOW",
+      "time_saved": 0.7,
+      "keywords": [
+        "progress",
+        "loading",
+        "animation"
+      ]
+    },
+    {
+      "id": "SCENARIO-UI-PROGRESS-002",
+      "domain": "Core_UI",
+      "title": "Spinner: Custom Color Themes",
+      "description": "Adds support for custom color themes in loading spinner with gradient background",
+      "files": [
+        "src/ui/components/spinner.kt",
+        "config/color_themes.xml"
+      ],
+      "risk": "LOW",
+      "time_saved": 0.9,
+      "keywords": [
+        "spinner",
+        "theming",
+        "animation"
+      ]
+    },
+    {
+      "id": "SCENARIO-TOOLKIT-THEME-001",
+      "domain": "UI_Toolkit",
+      "title": "Theming: Dynamic Dark Mode Toggle",
+      "description": "Implements dynamic dark mode with real-time theme switching without app restart",
+      "files": [
+        "src/theme/theme_manager.kt",
+        "config/dark_theme.xml"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.4,
+      "keywords": [
+        "theming",
+        "dark_mode",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "SCENARIO-TOOLKIT-THEME-002",
+      "domain": "UI_Toolkit",
+      "title": "Theming: Custom Color Palette Editor",
+      "description": "Adds in-app UI for editing custom color palettes with live preview of all components",
+      "files": [
+        "src/theme/palette_editor.kt",
+        "src/theme/theme_manager.c"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 2.0,
+      "keywords": [
+        "theming",
+        "customization",
+        "colors"
+      ]
+    },
+    {
+      "id": "SCENARIO-TOOLKIT-THEME-003",
+      "domain": "UI_Toolkit",
+      "title": "Theming: System Theme Inheritance",
+      "description": "Automatically inherits color scheme from system settings (Android Material, iOS semantic colors)",
+      "files": [
+        "src/theme/system_theme.kt",
+        "src/platform/platform_api.c"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.6,
+      "keywords": [
+        "theming",
+        "system",
+        "platform"
+      ]
+    },
+    {
+      "id": "SCENARIO-TOOLKIT-FONT-001",
+      "domain": "UI_Toolkit",
+      "title": "Font: Dynamic Text Scaling",
+      "description": "Implements dynamic text scaling based on system font size preferences (100%-200% range)",
+      "files": [
+        "src/typography/font_scaler.kt",
+        "config/text_scales.h"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.5,
+      "keywords": [
+        "font",
+        "accessibility",
+        "scaling"
+      ]
+    },
+    {
+      "id": "SCENARIO-TOOLKIT-FONT-002",
+      "domain": "UI_Toolkit",
+      "title": "Font: Custom Font Loading with Fallback",
+      "description": "Loads custom fonts with graceful fallback to system fonts when unavailable",
+      "files": [
+        "src/typography/font_loader.kt",
+        "res/fonts/",
+        "src/font/fallback.c"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.3,
+      "keywords": [
+        "font",
+        "loading",
+        "fallback"
+      ]
+    },
+    {
+      "id": "SCENARIO-TOOLKIT-FONT-003",
+      "domain": "UI_Toolkit",
+      "title": "Font: Variable Font Weight Support",
+      "description": "Implements support for variable font weights (100-900) with single font file",
+      "files": [
+        "src/typography/variable_fonts.kt",
+        "res/fonts/variable/"
+      ],
+      "risk": "LOW",
+      "time_saved": 0.8,
+      "keywords": [
+        "font",
+        "variable",
+        "typography"
+      ]
+    },
+    {
+      "id": "SCENARIO-TOOLKIT-LAYOUT-001",
+      "domain": "UI_Toolkit",
+      "title": "Layout: Responsive Grid System",
+      "description": "Implements 12-column responsive grid that adapts to different screen sizes",
+      "files": [
+        "src/layout/grid_system.kt",
+        "config/breakpoints.h"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 2.0,
+      "keywords": [
+        "layout",
+        "responsive",
+        "grid"
+      ]
+    },
+    {
+      "id": "SCENARIO-TOOLKIT-LAYOUT-002",
+      "domain": "UI_Toolkit",
+      "title": "Layout: Flexbox Engine",
+      "description": "Implements lightweight flexbox layout engine for declarative UI composition",
+      "files": [
+        "src/layout/flexbox.c",
+        "src/layout/layout_engine.c"
+      ],
+      "risk": "HIGH",
+      "time_saved": 2.8,
+      "keywords": [
+        "layout",
+        "flexbox",
+        "performance"
+      ]
+    },
+    {
+      "id": "SCENARIO-TOOLKIT-LAYOUT-003",
+      "domain": "UI_Toolkit",
+      "title": "Layout: Safe Area and Notch Handling",
+      "description": "Automatically adjusts layout for safe area insets and device notches",
+      "files": [
+        "src/layout/safe_area.kt",
+        "src/platform/device_info.c"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.4,
+      "keywords": [
+        "layout",
+        "safe_area",
+        "notch"
+      ]
+    },
+    {
+      "id": "SCENARIO-TOOLKIT-ANIM-001",
+      "domain": "UI_Toolkit",
+      "title": "Animation: Keyframe Animator with Easing",
+      "description": "Implements keyframe-based animator with 20+ easing functions (ease-in, ease-out, cubic-bezier)",
+      "files": [
+        "src/animation/keyframe_animator.c",
+        "config/easing_functions.h"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.9,
+      "keywords": [
+        "animation",
+        "easing",
+        "keyframe"
+      ]
+    },
+    {
+      "id": "SCENARIO-TOOLKIT-ANIM-002",
+      "domain": "UI_Toolkit",
+      "title": "Animation: Spring Physics Animation",
+      "description": "Adds realistic spring-based animations with configurable stiffness and damping",
+      "files": [
+        "src/animation/spring_animator.c",
+        "src/physics/spring_model.c"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.7,
+      "keywords": [
+        "animation",
+        "spring",
+        "physics"
+      ]
+    },
+    {
+      "id": "SCENARIO-TOOLKIT-GESTURE-001",
+      "domain": "UI_Toolkit",
+      "title": "Gesture: Multi-touch Gesture Recognition",
+      "description": "Implements multi-touch gesture detection (pinch, rotate, pan) with configurable thresholds",
+      "files": [
+        "src/gesture/gesture_detector.c",
+        "src/input/touch_handler.c"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 2.2,
+      "keywords": [
+        "gesture",
+        "multitouch",
+        "input"
+      ]
+    },
+    {
+      "id": "SCENARIO-TOOLKIT-GESTURE-002",
+      "domain": "UI_Toolkit",
+      "title": "Gesture: Long Press Detection",
+      "description": "Adds configurable long press gesture detection with visual feedback duration",
+      "files": [
+        "src/gesture/long_press.c",
+        "src/input/touch_handler.c"
+      ],
+      "risk": "LOW",
+      "time_saved": 0.9,
+      "keywords": [
+        "gesture",
+        "long_press",
+        "input"
+      ]
+    },
+    {
+      "id": "SCENARIO-TOOLKIT-A11Y-001",
+      "domain": "UI_Toolkit",
+      "title": "Accessibility: Screen Reader Integration",
+      "description": "Integrates screen reader support with semantic labels and content descriptions",
+      "files": [
+        "src/accessibility/screen_reader.c",
+        "src/accessibility/semantics.h"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 2.0,
+      "keywords": [
+        "accessibility",
+        "screen_reader",
+        "ARIA"
+      ]
+    },
+    {
+      "id": "SCENARIO-TOOLKIT-A11Y-002",
+      "domain": "UI_Toolkit",
+      "title": "Accessibility: Focus Management",
+      "description": "Implements keyboard focus management with visual focus indicators and tab order",
+      "files": [
+        "src/accessibility/focus_manager.c",
+        "src/input/keyboard_handler.c"
+      ],
+      "risk": "MEDIUM",
+      "time_saved": 1.6,
+      "keywords": [
+        "accessibility",
+        "focus",
+        "keyboard"
+      ]
+    }
+  ],
+  "meta": {
+    "total_scenarios": 44,
+    "domains": {
+      "Driving_Functions": 15,
+      "Core_UI": 14,
+      "UI_Toolkit": 15
+    },
+    "risk_distribution": {
+      "CRITICAL": 2,
+      "HIGH": 8,
+      "MEDIUM": 29,
+      "LOW": 5
+    },
+    "total_time_saved": 79.00000000000001,
+    "created_at": "2026-11-23T22:20:39.233578",
+    "note": "All scenario data generated for testing purposes. Domain and app names are intentionally generic."
+  }
+}

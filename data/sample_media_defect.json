@@ -1,0 +1,6 @@
+{
+  "id": "BUG-MEDIA-DEMO",
+  "summary": "Passenger climate setting shows an error after restart",
+  "description": "A simulated execution recording shows an error in the passenger temperature area after an ignition cycle.",
+  "attachments": ["sample_media/incident.mp4"]
+}

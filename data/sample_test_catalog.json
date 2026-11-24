@@ -1,0 +1,694 @@
+[
+  {
+    "id": "XRAY-1001",
+    "title": "Digital Cluster: Speedometer CAN Signal Scaling (0x1A4)",
+    "domain": "Digital_Cluster_Speedometer",
+    "preconditions": "Vehicle in ON state, CAN-FD bus operational, cluster firmware v2.3+",
+    "steps": [
+      "Send CAN frame 0x1A4 with payload [0x00, 0x20, 0x00, 0x00]",
+      "Verify cluster displays 32 km/h",
+      "Send frame [0x00, 0x64, 0x00, 0x00]",
+      "Verify cluster displays 100 km/h"
+    ],
+    "expected_result": "Speedometer scales correctly across range 0-240 km/h",
+    "hil_bench_tags": ["CAN-FD", "Cluster_Display"],
+    "estimated_duration_seconds": 45,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1002",
+    "title": "Cluster Layout: German Umlauts & Truncation Detection",
+    "domain": "Digital_Cluster_Speedometer",
+    "preconditions": "HMI language set to Deutsch, cluster firmware v2.3+",
+    "steps": [
+      "Send CAN message triggering mode display: Fahrstrecke",
+      "Verify German special characters render correctly",
+      "Measure displayed text width for edge cases",
+      "Confirm no truncation on 24-char field labels"
+    ],
+    "expected_result": "All German text displays without corruption or truncation",
+    "hil_bench_tags": ["Cluster_Display", "Internationalization"],
+    "estimated_duration_seconds": 60,
+    "languages_tested": ["DE"]
+  },
+  {
+    "id": "XRAY-1003",
+    "title": "Cluster Layout: Japanese Kanji Rendering on Curved Display",
+    "domain": "Digital_Cluster_Speedometer",
+    "preconditions": "HMI language set to 日本語, curved cluster panel active",
+    "steps": [
+      "Trigger navigation mode: 次のルートを左に曲がる",
+      "Render expected kanji glyphs at various curvature levels",
+      "Check for rendering artifacts on character edges",
+      "Verify no kanji truncation during incoming call overlay"
+    ],
+    "expected_result": "Japanese characters display correctly without glyph clipping",
+    "hil_bench_tags": ["Cluster_Display", "Internationalization"],
+    "estimated_duration_seconds": 75,
+    "languages_tested": ["JP"]
+  },
+  {
+    "id": "XRAY-1004",
+    "title": "SOME/IP-SD: Service Discovery TTL Timer Accuracy",
+    "domain": "SOMEIP_Service_Discovery",
+    "preconditions": "SOME/IP-SD protocol active, network simulated at 100 Mbps",
+    "steps": [
+      "Send OfferService message with TTL=3",
+      "Measure exact timeout duration at first interface",
+      "Verify TTL decrements on each hop",
+      "Confirm StopOfferService triggered at TTL expiry"
+    ],
+    "expected_result": "TTL timeout within ±10ms of expected value",
+    "hil_bench_tags": ["SOMEIP_Network", "Protocol_Stack"],
+    "estimated_duration_seconds": 90,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1005",
+    "title": "CAN-FD Gateway: Multi-Frame Message Reassembly",
+    "domain": "CANFD_Gateway",
+    "preconditions": "CAN-FD transceiver active, gateway routing rules loaded",
+    "steps": [
+      "Send segmented frame sequence: [FF 10 20 DD] + N frames",
+      "Verify gateway correctly reassembles across frames",
+      "Confirm message ID mapping to target network",
+      "Validate checksum computation on reassembled data"
+    ],
+    "expected_result": "Multi-frame messages reassembled correctly with zero data loss",
+    "hil_bench_tags": ["CAN-FD", "Gateway"],
+    "estimated_duration_seconds": 120,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1006",
+    "title": "AAOS Media Navigation: Bluetooth A2DP Stream Handoff",
+    "domain": "AAOS_Media_Navigation",
+    "preconditions": "AAOS enabled, Bluetooth stack v5.2+, media player active",
+    "steps": [
+      "Establish A2DP stream from paired device",
+      "Trigger USB connection while streaming",
+      "Monitor audio stream continuity during handoff",
+      "Confirm no buffer underruns or dropouts"
+    ],
+    "expected_result": "Seamless A2DP-to-USB handoff with <50ms audio glitch",
+    "hil_bench_tags": ["AAOS", "Bluetooth", "Audio"],
+    "estimated_duration_seconds": 100,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1007",
+    "title": "UDS Diagnostics: Session Control State Machine",
+    "domain": "UDS_Diagnostics",
+    "preconditions": "UDS server active, ISO 14229-1 compliant, security access enabled",
+    "steps": [
+      "Send DiagnosticSessionControl(0x10 0x01) for DefaultSession",
+      "Verify state transition with valid response",
+      "Send ExtendedDiagnosticSession(0x10 0x03)",
+      "Confirm session-dependent routine access enforcement"
+    ],
+    "expected_result": "Session transitions respect state machine, security enforced",
+    "hil_bench_tags": ["UDS", "Diagnostics"],
+    "estimated_duration_seconds": 55,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1008",
+    "title": "Multilingual HMI: German Menu Localization",
+    "domain": "Multilingual_HMI_DE_EN_JP",
+    "preconditions": "HMI language selector in Deutsch, all string resources loaded",
+    "steps": [
+      "Navigate to Settings menu",
+      "Verify all menu items display in German",
+      "Check for missing translations (untranslated fallback strings)",
+      "Confirm German special characters in all fields"
+    ],
+    "expected_result": "100% German localization coverage, no English fallbacks",
+    "hil_bench_tags": ["HMI", "Internationalization"],
+    "estimated_duration_seconds": 40,
+    "languages_tested": ["DE"]
+  },
+  {
+    "id": "XRAY-1009",
+    "title": "Multilingual HMI: English (US) Menu Localization",
+    "domain": "Multilingual_HMI_DE_EN_JP",
+    "preconditions": "HMI language selector in English (US), US locale active",
+    "steps": [
+      "Navigate to Settings menu",
+      "Verify all menu items display in US English",
+      "Confirm no metric-to-imperial confusion (mph vs km/h)",
+      "Check date/time format compliance with en_US locale"
+    ],
+    "expected_result": "100% English (US) localization, correct date/time formatting",
+    "hil_bench_tags": ["HMI", "Internationalization"],
+    "estimated_duration_seconds": 40,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1010",
+    "title": "Multilingual HMI: Japanese Menu Localization",
+    "domain": "Multilingual_HMI_DE_EN_JP",
+    "preconditions": "HMI language selector in 日本語, kanji set v3.1 installed",
+    "steps": [
+      "Navigate to Settings menu",
+      "Verify all menu items display in Japanese kanji/hiragana",
+      "Confirm no character encoding errors (UTF-8)",
+      "Check date/time format (2024年11月18日)"
+    ],
+    "expected_result": "100% Japanese localization, correct date/time per ja_JP locale",
+    "hil_bench_tags": ["HMI", "Internationalization"],
+    "estimated_duration_seconds": 45,
+    "languages_tested": ["JP"]
+  },
+  {
+    "id": "XRAY-1011",
+    "title": "Cluster Brightness: Automatic Adaptation to Ambient Light",
+    "domain": "Digital_Cluster_Speedometer",
+    "preconditions": "Light sensor calibrated, cluster firmware v2.3+, brightness range 0-100%",
+    "steps": [
+      "Simulate ambient light at 50 lux",
+      "Read cluster brightness level",
+      "Simulate ambient light at 500 lux",
+      "Verify brightness increased proportionally"
+    ],
+    "expected_result": "Brightness scales smoothly across ambient light range",
+    "hil_bench_tags": ["Cluster_Display", "Sensor_Integration"],
+    "estimated_duration_seconds": 60,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1012",
+    "title": "Navigation Banner: Incoming Call Overlay Rendering",
+    "domain": "AAOS_Media_Navigation",
+    "preconditions": "AAOS active, navigation route active, call incoming",
+    "steps": [
+      "Start active navigation on curved banner display",
+      "Trigger incoming call notification",
+      "Verify call UI overlays without corrupting navigation text",
+      "Confirm dismiss call UI restores full navigation view"
+    ],
+    "expected_result": "Overlay renders without text corruption or layout shift",
+    "hil_bench_tags": ["AAOS", "UI_Rendering"],
+    "estimated_duration_seconds": 50,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1013",
+    "title": "CAN Signal Scaling: Edge Case 0x0000 & 0xFFFF",
+    "domain": "Digital_Cluster_Speedometer",
+    "preconditions": "CAN-FD bus operational, cluster firmware v2.3+",
+    "steps": [
+      "Send CAN frame 0x1A4 with minimum payload [0x00, 0x00, 0x00, 0x00]",
+      "Verify cluster displays 0 km/h",
+      "Send frame with maximum payload [0x00, 0xFF, 0x00, 0x00]",
+      "Verify cluster displays 255 km/h or clamps to 240 km/h"
+    ],
+    "expected_result": "Edge case values handled without overflow or crash",
+    "hil_bench_tags": ["CAN-FD", "Cluster_Display"],
+    "estimated_duration_seconds": 40,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1014",
+    "title": "SOME/IP-SD: Multicast Listener Discovery Conformance",
+    "domain": "SOMEIP_Service_Discovery",
+    "preconditions": "SOME/IP-SD protocol active, multicast 224.244.224.245:30490 enabled",
+    "steps": [
+      "Monitor multicast traffic for OfferService messages",
+      "Verify multicast group membership correctness",
+      "Send FindService from client interface",
+      "Confirm OfferService responses on matching port"
+    ],
+    "expected_result": "Multicast discovery fully conformant to SOME/IP-SD spec",
+    "hil_bench_tags": ["SOMEIP_Network", "Multicast"],
+    "estimated_duration_seconds": 85,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1015",
+    "title": "Gateway Routing: Cross-Network CAN-to-Ethernet Frame Mapping",
+    "domain": "CANFD_Gateway",
+    "preconditions": "Gateway initialized, routing table loaded, both CAN and Ethernet active",
+    "steps": [
+      "Send CAN frame on primary network",
+      "Verify gateway maps to Ethernet UDS/SOME/IP equivalent",
+      "Inspect payload transformation and ID mapping",
+      "Confirm reverse mapping (Ethernet to CAN) also works"
+    ],
+    "expected_result": "Cross-network frame mapping 100% accurate, zero data loss",
+    "hil_bench_tags": ["CAN-FD", "Gateway", "Ethernet"],
+    "estimated_duration_seconds": 110,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1016",
+    "title": "UDS: ReadDataByIdentifier (0x22) for VIN Retrieval",
+    "domain": "UDS_Diagnostics",
+    "preconditions": "UDS server active, VIN storage initialized, session DefaultSession",
+    "steps": [
+      "Send ReadDataByIdentifier request for VIN (0xF190)",
+      "Verify 17-byte VIN returned correctly",
+      "Confirm format compliance (ISO 3779)",
+      "Test with invalid DID to verify error handling"
+    ],
+    "expected_result": "VIN retrieved correctly, error handling robust",
+    "hil_bench_tags": ["UDS", "Diagnostics"],
+    "estimated_duration_seconds": 35,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1017",
+    "title": "Bluetooth: Peer Connection & Disconnection State Transitions",
+    "domain": "AAOS_Media_Navigation",
+    "preconditions": "Bluetooth stack v5.2+, test device in pairing mode",
+    "steps": [
+      "Establish connection to test device",
+      "Verify CONNECTED state reached",
+      "Trigger intentional disconnect",
+      "Confirm proper state cleanup and reconnection possible"
+    ],
+    "expected_result": "Connection state machine transitions correctly without deadlock",
+    "hil_bench_tags": ["Bluetooth", "AAOS"],
+    "estimated_duration_seconds": 70,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1018",
+    "title": "German HMI: Error Messages with Umlauts",
+    "domain": "Multilingual_HMI_DE_EN_JP",
+    "preconditions": "HMI language set to Deutsch, error scenario triggers",
+    "steps": [
+      "Trigger CAN bus error condition",
+      "Verify error message displays: Fehler bei Kommunikation",
+      "Confirm all Umlauts (ä, ö, ü, ß) render correctly",
+      "Check no log encoding corruption"
+    ],
+    "expected_result": "German error messages display flawlessly with correct encoding",
+    "hil_bench_tags": ["HMI", "Error_Handling"],
+    "estimated_duration_seconds": 30,
+    "languages_tested": ["DE"]
+  },
+  {
+    "id": "XRAY-1019",
+    "title": "Japanese HMI: Curved Display Text Clipping Prevention",
+    "domain": "Digital_Cluster_Speedometer",
+    "preconditions": "Curved display active, 日本語 language set, kanji rendering engine v3.1",
+    "steps": [
+      "Render long Japanese text on curved surface",
+      "Measure rendered glyph width at various curvature angles",
+      "Verify no clipping at field boundaries",
+      "Test with complex compound kanji sequences"
+    ],
+    "expected_result": "All Japanese text renders without clipping on curved surface",
+    "hil_bench_tags": ["Cluster_Display", "Internationalization"],
+    "estimated_duration_seconds": 80,
+    "languages_tested": ["JP"]
+  },
+  {
+    "id": "XRAY-1020",
+    "title": "CAN-FD: Extended Frame ID Support (29-bit)",
+    "domain": "CANFD_Gateway",
+    "preconditions": "CAN-FD controller configured for extended IDs, gateway active",
+    "steps": [
+      "Send extended CAN frame with ID 0x18FF1234",
+      "Verify gateway correctly routes by extended ID",
+      "Confirm standard frame ID filtering doesn't block extended",
+      "Test routing table with mixed standard/extended IDs"
+    ],
+    "expected_result": "Extended frame routing works correctly, no ID conflicts",
+    "hil_bench_tags": ["CAN-FD", "Gateway"],
+    "estimated_duration_seconds": 95,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1021",
+    "title": "SOME/IP: Method Invocation Timeout & Retry Logic",
+    "domain": "SOMEIP_Service_Discovery",
+    "preconditions": "SOME/IP service active, RequestResponse method configured",
+    "steps": [
+      "Invoke method on remote service",
+      "Measure response latency",
+      "Simulate network delay (200ms)",
+      "Verify retry logic triggers after timeout, recovers correctly"
+    ],
+    "expected_result": "Timeout/retry logic prevents indefinite hangs, ensures reliability",
+    "hil_bench_tags": ["SOMEIP_Network", "Protocol_Stack"],
+    "estimated_duration_seconds": 100,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1022",
+    "title": "Cluster Fuel Gauge: CAN Message 0x1F4 Scaling Accuracy",
+    "domain": "Digital_Cluster_Speedometer",
+    "preconditions": "Fuel tank capacity 65L, CAN-FD operational",
+    "steps": [
+      "Send fuel level messages (0x1F4) with payloads 0%, 50%, 100%",
+      "Measure displayed fuel gauge position",
+      "Verify accuracy within ±2% of actual level",
+      "Test hysteresis behavior during rapid level changes"
+    ],
+    "expected_result": "Fuel gauge scales accurately across full tank range",
+    "hil_bench_tags": ["CAN-FD", "Cluster_Display"],
+    "estimated_duration_seconds": 65,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1023",
+    "title": "UDS: Security Access Seed/Key Exchange",
+    "domain": "UDS_Diagnostics",
+    "preconditions": "UDS server active, security level 0x01 configured",
+    "steps": [
+      "Request SecurityAccess seed",
+      "Compute correct key from seed using manufacturer algorithm",
+      "Send SecurityAccessUnlock with computed key",
+      "Verify access granted, session allows protected operations"
+    ],
+    "expected_result": "Seed/key exchange succeeds, security enforced correctly",
+    "hil_bench_tags": ["UDS", "Diagnostics", "Security"],
+    "estimated_duration_seconds": 50,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1024",
+    "title": "AAOS: Google Play Services Integration & Capability Detection",
+    "domain": "AAOS_Media_Navigation",
+    "preconditions": "AAOS enabled, GMS stack present, network available",
+    "steps": [
+      "Query AAOS capabilities via Google Play Services API",
+      "Verify navigation, media, and voice services available",
+      "Check capability version compatibility",
+      "Trigger fallback for unavailable services"
+    ],
+    "expected_result": "AAOS capabilities detected correctly, fallback works",
+    "hil_bench_tags": ["AAOS", "Integration"],
+    "estimated_duration_seconds": 60,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1025",
+    "title": "Ethernet: IPv4 Network Configuration & DHCP Lease Renewal",
+    "domain": "CANFD_Gateway",
+    "preconditions": "Ethernet interface active, DHCP server available",
+    "steps": [
+      "Boot system, verify DHCP IP assignment",
+      "Measure DHCP lease negotiation time",
+      "Force lease expiry, monitor renewal sequence",
+      "Confirm connectivity maintained throughout renewal"
+    ],
+    "expected_result": "DHCP lease management stable, no connectivity drops",
+    "hil_bench_tags": ["Ethernet", "Network"],
+    "estimated_duration_seconds": 75,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1026",
+    "title": "Cluster: Speedometer Needle Response Latency",
+    "domain": "Digital_Cluster_Speedometer",
+    "preconditions": "CAN-FD operational, cluster firmware v2.3+, digital speedometer active",
+    "steps": [
+      "Send rapid CAN speed updates at 10ms intervals",
+      "Measure time from CAN frame arrival to display update",
+      "Verify needle animation latency <50ms",
+      "Test with varying update frequencies (10ms, 20ms, 50ms)"
+    ],
+    "expected_result": "Display latency <50ms for all update frequencies",
+    "hil_bench_tags": ["CAN-FD", "Cluster_Display", "Latency"],
+    "estimated_duration_seconds": 55,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1027",
+    "title": "Gateway: Ethernet Packet Loss Resilience & Retransmission",
+    "domain": "CANFD_Gateway",
+    "preconditions": "Gateway active, Ethernet link simulated with 5% packet loss",
+    "steps": [
+      "Send UDP diagnostic request across gateway",
+      "Monitor for retransmissions on packet loss",
+      "Verify message delivery after retries (max 3)",
+      "Confirm error logged if delivery fails after retries"
+    ],
+    "expected_result": "Retransmission logic ensures reliable delivery despite loss",
+    "hil_bench_tags": ["Ethernet", "Gateway", "Reliability"],
+    "estimated_duration_seconds": 90,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1028",
+    "title": "German Locale: Date/Time Display Format (DD.MM.YYYY HH:MM:SS)",
+    "domain": "Multilingual_HMI_DE_EN_JP",
+    "preconditions": "HMI language Deutsch, system time accurate",
+    "steps": [
+      "Display current date and time on HMI",
+      "Verify German date format: 18.11.2024",
+      "Confirm time format: 22:27:29",
+      "Test locale-specific separator characters"
+    ],
+    "expected_result": "Date/time displays in German format with correct separators",
+    "hil_bench_tags": ["HMI", "Internationalization"],
+    "estimated_duration_seconds": 25,
+    "languages_tested": ["DE"]
+  },
+  {
+    "id": "XRAY-1029",
+    "title": "Japanese Locale: Date/Time Display Format (YYYY年MM月DD日 HH:MM:SS)",
+    "domain": "Multilingual_HMI_DE_EN_JP",
+    "preconditions": "HMI language 日本語, system time accurate",
+    "steps": [
+      "Display current date and time on HMI",
+      "Verify Japanese date format: 2024年11月18日",
+      "Confirm time format: 22:27:29",
+      "Verify kanji rendering for date units (年月日)"
+    ],
+    "expected_result": "Date/time displays in Japanese format with kanji",
+    "hil_bench_tags": ["HMI", "Internationalization"],
+    "estimated_duration_seconds": 25,
+    "languages_tested": ["JP"]
+  },
+  {
+    "id": "XRAY-1030",
+    "title": "CAN Message Filter: Selective Frame Processing & Masking",
+    "domain": "CANFD_Gateway",
+    "preconditions": "CAN gateway active, filter rules configured",
+    "steps": [
+      "Define filter to accept only frames with ID mask 0x1A0-0x1AF",
+      "Send frames within and outside range",
+      "Verify only matching frames processed",
+      "Test inverted mask logic (reject matching frames)"
+    ],
+    "expected_result": "CAN frame filtering works correctly per configured masks",
+    "hil_bench_tags": ["CAN-FD", "Gateway"],
+    "estimated_duration_seconds": 65,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1031",
+    "title": "Bluetooth: HFP Profile (Hands-Free) Call Control",
+    "domain": "AAOS_Media_Navigation",
+    "preconditions": "Bluetooth HFP v1.7+, test handset available",
+    "steps": [
+      "Establish HFP connection with test device",
+      "Trigger incoming call, verify ringing on HMI",
+      "Accept call, verify audio routed to HMI speaker",
+      "Hang up call, verify audio returns to previous state"
+    ],
+    "expected_result": "HFP call control flow works seamlessly end-to-end",
+    "hil_bench_tags": ["Bluetooth", "AAOS"],
+    "estimated_duration_seconds": 85,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1032",
+    "title": "Cluster Layout: RTL Text (Arabic) Bidirectional Support",
+    "domain": "Digital_Cluster_Speedometer",
+    "preconditions": "Cluster firmware supports bidirectional text, Arabic font loaded",
+    "steps": [
+      "Set HMI to Arabic language",
+      "Display Arabic text on cluster",
+      "Verify RTL text direction and glyph shaping",
+      "Confirm numbers still display LTR within Arabic text"
+    ],
+    "expected_result": "Bidirectional text renders correctly with proper glyph shaping",
+    "hil_bench_tags": ["Cluster_Display", "Internationalization"],
+    "estimated_duration_seconds": 60,
+    "languages_tested": ["AR"]
+  },
+  {
+    "id": "XRAY-1033",
+    "title": "SOME/IP Event Subscription & Delivery Reliability",
+    "domain": "SOMEIP_Service_Discovery",
+    "preconditions": "SOME/IP service active, event subscription enabled",
+    "steps": [
+      "Subscribe to service event (e.g., SpeedChanged)",
+      "Trigger event at service, verify delivery",
+      "Subscribe multiple clients, verify fanout delivery",
+      "Unsubscribe one client, confirm selective delivery"
+    ],
+    "expected_result": "Event delivery reliable, fanout works for multiple subscribers",
+    "hil_bench_tags": ["SOMEIP_Network", "Protocol_Stack"],
+    "estimated_duration_seconds": 95,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1034",
+    "title": "UDS: RoutineControl (0x31) for Diagnostic Routines",
+    "domain": "UDS_Diagnostics",
+    "preconditions": "UDS server active, DiagnosticSessionControl in ExtendedSession",
+    "steps": [
+      "Send RoutineControl(0x31) with routine ID 0xF401",
+      "Verify routine execution starts, status changes",
+      "Request routine status (0x31 0x03)",
+      "Confirm routine results returned upon completion"
+    ],
+    "expected_result": "Routine control flow executes correctly with status feedback",
+    "hil_bench_tags": ["UDS", "Diagnostics"],
+    "estimated_duration_seconds": 70,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1035",
+    "title": "German Cockpit: Error Codes with Diagnostic Text Display",
+    "domain": "Digital_Cluster_Speedometer",
+    "preconditions": "HMI language Deutsch, diagnostic text base loaded",
+    "steps": [
+      "Trigger diagnostic fault (e.g., CAN bus error P0A02)",
+      "Verify German fault description: Kommunikationsfehler CAN",
+      "Confirm fault code format matches DTC standard",
+      "Check no truncation in 32-char error display field"
+    ],
+    "expected_result": "Fault codes display in German with correct diagnostic text",
+    "hil_bench_tags": ["Cluster_Display", "Diagnostics"],
+    "estimated_duration_seconds": 40,
+    "languages_tested": ["DE"]
+  },
+  {
+    "id": "XRAY-1036",
+    "title": "Climate control: restore temperature after ignition cycle",
+    "domain": "Climate_Control",
+    "preconditions": "Climate simulator connected; driver and passenger zones enabled",
+    "steps": ["Set driver temperature to 21 C and passenger temperature to 23 C", "Cycle ignition off and on", "Compare displayed settings with simulated climate controller state"],
+    "expected_result": "Both zone settings are restored and match the controller without unintended changes",
+    "hil_bench_tags": ["Climate", "CAN-FD", "HMI"],
+    "estimated_duration_seconds": 90,
+    "languages_tested": ["EN", "DE"]
+  },
+  {
+    "id": "XRAY-1037",
+    "title": "Climate control: unavailable seat heating feedback",
+    "domain": "Climate_Control",
+    "preconditions": "Seat heating simulator reports unavailable",
+    "steps": ["Open seat heating controls", "Attempt to activate driver seat heating", "Inspect control state and feedback message"],
+    "expected_result": "The unavailable control is clearly indicated and no activation request is sent",
+    "hil_bench_tags": ["Climate", "HMI", "CAN-FD"],
+    "estimated_duration_seconds": 60,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1038",
+    "title": "Parking assistance: camera overlay and reverse transition",
+    "domain": "Parking_Assistance",
+    "preconditions": "Camera simulator and reverse gear signal connected",
+    "steps": ["Select reverse and verify camera view and guidelines", "Inject an obstacle distance update", "Leave reverse and verify camera view closes"],
+    "expected_result": "Camera and obstacle overlay respond to signals and close when reverse is exited",
+    "hil_bench_tags": ["Camera", "HMI", "CAN-FD"],
+    "estimated_duration_seconds": 100,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1039",
+    "title": "Parking assistance: camera signal loss fallback",
+    "domain": "Parking_Assistance",
+    "preconditions": "Rear camera view active with a valid simulated video feed",
+    "steps": ["Disconnect the simulated camera feed", "Observe the video area and warning", "Restore the feed"],
+    "expected_result": "A clear unavailable warning replaces stale imagery and the current feed returns after recovery",
+    "hil_bench_tags": ["Camera", "HMI", "Fault_Injection"],
+    "estimated_duration_seconds": 80,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1040",
+    "title": "Phone: incoming call interrupts navigation guidance",
+    "domain": "Phone_Connectivity",
+    "preconditions": "Bluetooth handset paired; route guidance and media playback active",
+    "steps": ["Trigger an incoming call during a navigation prompt", "Accept and end the call", "Verify call audio routing and resume navigation and media"],
+    "expected_result": "Call controls remain accessible and audio focus returns to the appropriate source after the call",
+    "hil_bench_tags": ["Bluetooth", "Audio", "Navigation"],
+    "estimated_duration_seconds": 120,
+    "languages_tested": ["EN", "JP"]
+  },
+  {
+    "id": "XRAY-1041",
+    "title": "Phone: Bluetooth reconnect after ignition restart",
+    "domain": "Phone_Connectivity",
+    "preconditions": "A paired handset with phone and audio profiles is available",
+    "steps": ["Connect the handset", "Cycle the ignition", "Observe reconnection and place a test call"],
+    "expected_result": "The paired handset reconnects without duplicate pairing and call audio is available",
+    "hil_bench_tags": ["Bluetooth", "Audio", "Power_Cycle"],
+    "estimated_duration_seconds": 110,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1042",
+    "title": "Media: USB removal during playback",
+    "domain": "Media_Playback",
+    "preconditions": "USB test device with playable audio is connected",
+    "steps": ["Start playback from USB", "Remove the USB device during playback", "Reconnect the device and browse the library"],
+    "expected_result": "Playback stops cleanly, the source is marked unavailable, and the library recovers after reconnect",
+    "hil_bench_tags": ["USB", "Audio", "HMI"],
+    "estimated_duration_seconds": 90,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1043",
+    "title": "Media: audio focus during navigation prompt",
+    "domain": "Media_Playback",
+    "preconditions": "Radio playback and simulated navigation guidance active",
+    "steps": ["Play radio at a known volume", "Trigger a navigation voice prompt", "Observe source volume during and after the prompt"],
+    "expected_result": "Guidance is audible and radio volume returns to its previous level after the prompt",
+    "hil_bench_tags": ["Audio", "Radio", "Navigation"],
+    "estimated_duration_seconds": 70,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1044",
+    "title": "Navigation: route recovery after network loss",
+    "domain": "Navigation",
+    "preconditions": "Active route with locally available map data and simulated network connection",
+    "steps": ["Start route guidance", "Disconnect the network", "Request a reroute using available offline data", "Reconnect the network"],
+    "expected_result": "The app indicates connectivity loss, continues available guidance, and recovers online services without losing the destination",
+    "hil_bench_tags": ["Navigation", "Network", "Fault_Injection"],
+    "estimated_duration_seconds": 120,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1045",
+    "title": "Charging: charging session interruption and recovery",
+    "domain": "Charging",
+    "preconditions": "Charging simulator connected; charging status displayed on HMI",
+    "steps": ["Start a simulated charging session", "Inject a charger interruption", "Restore the simulated charger and inspect status"],
+    "expected_result": "The interruption is visible, displayed charge status matches the simulator, and recovery is reported accurately",
+    "hil_bench_tags": ["Charging", "CAN-FD", "HMI"],
+    "estimated_duration_seconds": 100,
+    "languages_tested": ["EN", "DE"]
+  },
+  {
+    "id": "XRAY-1046",
+    "title": "Vehicle settings: units change propagates across displays",
+    "domain": "Vehicle_Settings",
+    "preconditions": "Cluster and center display connected; simulated speed and distance available",
+    "steps": ["Set units to metric and record displayed speed and distance", "Switch units to imperial", "Inspect cluster and navigation distance displays"],
+    "expected_result": "Both displays show consistent converted values and unit labels without changing underlying signals",
+    "hil_bench_tags": ["Cluster_Display", "Navigation", "Settings"],
+    "estimated_duration_seconds": 75,
+    "languages_tested": ["EN"]
+  },
+  {
+    "id": "XRAY-1047",
+    "title": "Display controls: brightness adjustment and persistence",
+    "domain": "Display_Settings",
+    "preconditions": "Instrument and center displays available with brightness controls",
+    "steps": ["Adjust brightness to a supported low setting", "Verify the display remains readable and the control shows the setting", "Cycle ignition and inspect the restored setting"],
+    "expected_result": "Brightness follows the selected supported value and the persisted setting is restored",
+    "hil_bench_tags": ["Display", "HMI", "Power_Cycle"],
+    "estimated_duration_seconds": 75,
+    "languages_tested": ["EN"]
+  }
+]
